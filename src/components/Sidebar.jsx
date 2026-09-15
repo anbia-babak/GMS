@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router";
 
 
@@ -26,7 +25,7 @@ function NavigationIcon({ label }) {
 
 function Sidebar(){
     return(
-        <aside className="hidden h-screen w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground md:flex">
+        <aside className="hidden sticky top-0 h-screen w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground md:flex">
             <div className="flex items-center gap-3 px-5 py-6">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                     <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="2"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12" /><path d="m8 7 2-2M14 19l2-2" /></svg>

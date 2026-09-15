@@ -2,7 +2,6 @@ import mockData from "../../data/mockData";
 import IncomeChart from "../IncomeChart";
 import InfoRow from "../InfoRow";
 import MemberShipOverview from "../MemberShipOverview";
-import Sidebar from "../Sidebar";
 import SummaryCard from "../SummaryCard";
 
 

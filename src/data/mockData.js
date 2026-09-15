@@ -64,5 +64,66 @@ dashboardInfo : [
     },
 ],
 expiringSoonCount : 10,
-}
+
+    // UI data fix: this collection must be part of mockData for the Members view to render it.
+    members: [
+    {
+        id: "001",
+        img: "../src/assets/user-avatars/user-avatar-1.jpg",
+        name: "Ahmad",
+        payment: "cash",
+        time: "20min",
+        status: "Active",
+    },
+    {
+        id: "002",
+        img: "../src/assets/user-avatars/user-avatar-2.jpg",
+        name: "Mahmood",
+        payment: "cash",
+        time: "1hr",
+        status: "Active",
+    },
+    {
+        id: "003",
+        img: "../src/assets/user-avatars/user-avatar-3.jpg",
+        name: "Ali",
+        payment: "cash",
+        time: "10hrs",
+        status: "Active",
+    },
+    {
+        id: "004",
+        img: "../src/assets/user-avatars/user-avatar-4.jpg",
+        name: "Basir",
+        payment: "cash",
+        time: "1day",
+        status: "Active",
+    },
+    {
+        id: "005",
+        img: "../src/assets/user-avatars/user-avatar-5.jpg",
+        name: "Saleem",
+        payment: "cash",
+        time: "27days",
+        status: "Expiring Soon",
+    },
+    {
+        id: "006",
+        img: "../src/assets/user-avatars/user-avatar-6.jpg",
+        name: "Qader",
+        payment: "cash",
+        time: "33days",
+        status: "Expired",
+    },
+    {
+        id: "007",
+        img: "../src/assets/user-avatars/user-avatar-7.jpg",
+        name: "Sabawoon",
+        payment: "cash",
+        time: "28days",
+        status: "Expiring Soon",
+    },
+],
+};
+
 export default mockData;
