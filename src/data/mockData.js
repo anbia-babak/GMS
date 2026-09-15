@@ -52,7 +52,7 @@ const mockData = {
     },
 ],
 
-dashboardInfo : [
+    dashboardInfo : [
     {
         label: "Membership Expiring Soon",
         value: 10,
@@ -63,7 +63,7 @@ dashboardInfo : [
         action: "View",
     },
 ],
-expiringSoonCount : 10,
+    expiringSoonCount : 10,
 
     // UI data fix: this collection must be part of mockData for the Members view to render it.
     members: [
@@ -123,6 +123,64 @@ expiringSoonCount : 10,
         time: "28days",
         status: "Expiring Soon",
     },
+],
+    memberships: [
+        {   
+            id : 1,
+            member: "Ahmad",
+            plan: "3 Mo",
+            start: "Sep 1",
+            expire: "Dec 1",
+            status: "Active",
+        },
+        {
+            id : 2,
+            member: "Mahmood",
+            plan: "3 Mo",
+            start: "Sep 1",
+            expire: "Dec 1",
+            status: "Active",
+        },
+        {
+            id : 3,
+            member: "Ali",
+            plan: "6 Mo",
+            start: "Sep 1",
+            expire: "Mar 1",
+            status: "Active",
+        },
+        {
+            id : 4,
+            member: "Basir",
+            plan: "1 year",
+            start: "Sep 1",
+            expire: "Oct 1",
+            status: "Active",
+        },
+        {
+            id : 5,
+            member: "Saleem",
+            plan: "3 Mo",
+            start: "Jul 20",
+            expire: "Sep 20",
+            status: "Expiring Soon",
+        },
+        {
+            id : 6,
+            member: "Qader",
+            plan: "3 Mo",
+            start: "June 10",
+            expire: "Aug 10",
+            status: "Expired",
+        },
+        {
+            id : 7,
+            member: "Sabawoon",
+            plan: "3 Mo",
+            start: "Jul 23",
+            expire: "Sep 23",
+            status: "Expiring Soon",
+        },      
 ],
 };
 

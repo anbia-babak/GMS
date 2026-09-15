@@ -2,6 +2,7 @@ import {createBrowserRouter, RouterProvider} from "react-router";
 import Dashboard from "./components/pages/Dashboard";
 import Members from "./components/pages/Members";
 import MainLayout from "./components/layouts/MainLayout";
+import Memberships from "./components/pages/Memberships";
 // import Payments from "./components/pages/Payments";
 
 
@@ -24,6 +25,10 @@ function App() {
         path: "/members",
         element: <Members />,
       },
+      {
+        path: "/membership",
+        element: <Memberships />
+      }
       // {
       //   path: "/payments",
       //   element: <Payments />,

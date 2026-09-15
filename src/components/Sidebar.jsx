@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 
 
 const navItems = [
@@ -38,11 +38,11 @@ function Sidebar(){
 
             <nav className="flex-1 space-y-1 px-3 py-2">
                 {navItems.map((item)=>(
-                    <Link to={item.path} key={item.label}
-                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${item.label === "Dashboard" ? "bg-primary text-primary-foreground shadow-md shadow-primary/10" : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"}`}>
+                    <NavLink to={item.path} key={item.label}
+                    className={({ isActive }) => `flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${isActive ? "bg-primary text-primary-foreground shadow-md shadow-primary/10" : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"}`}>
                         <NavigationIcon label={item.label} />
                         {item.label}
-                    </Link>
+                    </NavLink>
                 ))}
             </nav>
 

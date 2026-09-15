@@ -2,8 +2,10 @@ import Searchbar from "../members/Searchbar";
 import MembersNavigation from "../members/MembersNavigation";
 import MembersNamesHeader from "../members/MembersNamesHeader";
 import MemberInfoCard from "../members/MemberInfoCard";
+import mockData from "../../data/mockData";
 
 function Members(){
+    const {members} = mockData;
     return(
         <section className="min-h-screen bg-background px-5 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
@@ -20,7 +22,9 @@ function Members(){
             </div>
             <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-lg shadow-black/10">
                 <MembersNamesHeader />
-                <MemberInfoCard />
+                    {members.map((card)=>(
+                       <MemberInfoCard key={card.id} {...card}/> 
+                    ))}
             </div>
             </div>
         </section>
