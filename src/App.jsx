@@ -1,9 +1,9 @@
 import {createBrowserRouter, RouterProvider} from "react-router";
-import Dashboard from "./components/pages/Dashboard";
+import Dashboard from "../src/components/pages/Dashboard";
 import Members from "./components/pages/Members";
 import MainLayout from "./components/layouts/MainLayout";
 import Memberships from "./components/pages/Memberships";
-// import Payments from "./components/pages/Payments";
+import Payments from "../src/components/pages/Payments";
 
 
 function App() {
@@ -28,11 +28,11 @@ function App() {
       {
         path: "/membership",
         element: <Memberships />
-      }
-      // {
-      //   path: "/payments",
-      //   element: <Payments />,
-      // }
+      },
+      {
+        path: "/payments",
+        element: <Payments />,
+      },
     ],
   },
 ]);

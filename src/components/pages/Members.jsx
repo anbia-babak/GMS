@@ -3,9 +3,22 @@ import MembersNavigation from "../members/MembersNavigation";
 import MembersNamesHeader from "../members/MembersNamesHeader";
 import MemberInfoCard from "../members/MemberInfoCard";
 import mockData from "../../data/mockData";
+import Button from "../Dashboard/Button";
+import { useState } from "react";
+import AddMemberModal from "../members/AddMemberModal";
+
 
 function Members(){
     const {members} = mockData;
+    // Tracking AddMemberModal state:
+    const [showAddMember, setShowAddMember] = useState(false);
+
+    // Hanndling Add New Member Click:
+    function handleAddShowMemberClick (){
+        setShowAddMember(true);
+    }
+
+
     return(
         <section className="min-h-screen bg-background px-5 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
@@ -17,6 +30,14 @@ function Members(){
                     </div>
                     <Searchbar />
                 </header>
+                <Button buttonName="New Member" callback={handleAddShowMemberClick}/>
+                {/* Showing The Add Members Modal:*/}
+                {showAddMember && (
+                    <AddMemberModal onClose={()=>{
+                        setShowAddMember(false);
+                    }}/>
+                )}
+
             <div className="mb-5">
                 <MembersNavigation />
             </div>

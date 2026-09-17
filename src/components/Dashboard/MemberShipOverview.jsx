@@ -1,4 +1,4 @@
-import mockData from "../data/mockData";
+import mockData from "../../data/mockData";
 import { Pie, PieChart, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 // import { RechartsDevtools } from '@recharts/devtools';
 

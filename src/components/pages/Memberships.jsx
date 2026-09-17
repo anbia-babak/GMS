@@ -1,16 +1,21 @@
 import { useMemo, useState } from "react";
-import SummaryCard from "../SummaryCard";
-import AssignMembershipButton from "../Memberships/AssignMembershipButton";
+import SummaryCard from "../Dashboard/SummaryCard";
+import Button from "../Dashboard/Button";
 import Searchbar from "../members/Searchbar";
 import SearchingFilters from "../Memberships/SearchingFilters";
 import MembershipNamesHeader from "../Memberships/MembershipNamesHeader";
 import MembershipInfoCard from "../Memberships/MembershipInfoCard";
 import mockData from "../../data/mockData";
+import AddMembershipModal from "../Memberships/AddMembershipModal";
 
 
 
 function Memberships(){
 const { memberships } = mockData;
+// Tracking AddMembershipModal State:
+const [showAddMembership, setShowAddMembership] = useState(false);
+
+
 const [searchTerm, setSearchTerm] = useState("");
 const [status, setStatus] = useState("All");
 const [plan, setPlan] = useState("All");
@@ -33,6 +38,13 @@ const summaryCards = [
     { id: "expired-memberships", label: "Expired", value: memberships.filter((membership) => membership.status === "Expired").length },
     { id: "total-memberships", label: "Total Memberships", value: memberships.length },
 ];
+
+
+
+// Handling Assign Membership Click:
+function handleAssignMembershipClick() {
+    setShowAddMembership(true);
+}
 
 const updateSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -59,8 +71,15 @@ const updatePlan = (nextPlan) => {
                         <p className="mt-1 text-sm text-muted-foreground">Manage and track member memberships.</p>
                     </div>
                     <div className="mt-4">
-                        <AssignMembershipButton />
+                        <Button buttonName="Assign Membership" callback={handleAssignMembershipClick} /> 
                     </div>
+
+                    {/* Showing The AddMembershipModal: */}
+                    {showAddMembership &&(
+                        <AddMembershipModal onClose={()=>{
+                            setShowAddMembership(false);
+                        }}/>
+                    )}
                 </header>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     {summaryCards.map((card) => (

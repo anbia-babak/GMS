@@ -1,8 +1,8 @@
 import mockData from "../../data/mockData";
-import IncomeChart from "../IncomeChart";
-import InfoRow from "../InfoRow";
-import MemberShipOverview from "../MemberShipOverview";
-import SummaryCard from "../SummaryCard";
+import IncomeChart from "../Dashboard/IncomeChart";
+import InfoRow from "../Dashboard/InfoRow";
+import MemberShipOverview from "../Dashboard/MemberShipOverview";
+import SummaryCard from "../Dashboard/SummaryCard";
 
 
 

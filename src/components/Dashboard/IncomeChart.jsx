@@ -1,4 +1,4 @@
-import mockData from "../data/mockData";
+import mockData from "../../data/mockData";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 // import { generateMockData, RechartsDevtools } from '@recharts/devtools';
 

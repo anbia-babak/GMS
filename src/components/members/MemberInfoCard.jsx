@@ -28,9 +28,9 @@ const statusDotColors = {
 function MemberInfoCard(props){
 
     return(
-        <div className="space-y-3 p-3 sm:p-4">
+        <div className="space-y-3 p-3 sm:p-2">
                 <div className="flex min-w-[830px] items-center rounded-xl border border-border bg-background/35
-                px-4 py-4 shadow-sm shadow-black/10 transition hover:-translate-y-0.5 hover:border-primary/50 hover:bg-accent/20">
+                        px-4 py-4 shadow-sm shadow-black/10 transition hover:-translate-y-0.5 hover:border-primary/50 hover:bg-accent/20">
                     <p className="w-[72px] shrink-0 text-sm font-medium text-muted-foreground">#{props.id}</p>
                     <div className="flex w-[240px] shrink-0 items-center gap-3">
                         <img src={avatarById[props.id]} alt={`${props.name}'s profile`} className="h-10 w-10 rounded-full border border-border object-cover" />
