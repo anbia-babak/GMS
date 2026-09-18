@@ -63,38 +63,43 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #051F20;
-  --foreground: #DAF1DE;
-  --card: #0B2B26;
-  --card-foreground: #DAF1DE;
-  --popover: #163832;
-  --popover-foreground: #DAF1DE;
-  --primary: #8EB69B;
-  --primary-foreground: #051F20;
-  --secondary: #163832;
-  --secondary-foreground: #DAF1DE;
-  --muted: #163832;
-  --muted-foreground: #8EB69B;
-  --accent: #255347;
-  --accent-foreground: #DAF1DE;
-  --destructive: #255347;
-  --destructive-foreground: #DAF1DE;
-  --border: #255347;
-  --input: #255347;
-  --ring: #8EB69B;
-  --chart-1: #8EB69B;
-  --chart-2: #DAF1DE;
-  --chart-3: #255347;
-  --chart-4: #163832;
-  --chart-5: #0B2B26;
-  --sidebar: #051F20;
-  --sidebar-foreground: #DAF1DE;
-  --sidebar-primary: #8EB69B;
-  --sidebar-primary-foreground: #051F20;
-  --sidebar-accent: #163832;
-  --sidebar-accent-foreground: #DAF1DE;
-  --sidebar-border: #163832;
-  --sidebar-ring: #8EB69B;
+
+  --background: oklch(0.975 0.008 158);        /* near-white with a faint green breath, not pure #FFF */
+  --foreground: oklch(0.24 0.04 162);          /* deep green text, darker than the dark-theme fg */
+  --card: oklch(1 0 0);                        /* pure white cards, tables, inputs — pop against bg */
+  --card-foreground: oklch(0.24 0.04 162);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.04 162);
+
+  --primary: oklch(0.35 0.08 163);             /* deep green buttons + primary text accents */
+  --primary-foreground: oklch(0.96 0.035 153); /* mint text on primary buttons */
+  --secondary: oklch(0.93 0.035 153);          /* soft mint chips / avatars */
+  --secondary-foreground: oklch(0.3 0.06 162);
+  --muted: oklch(0.955 0.012 157);             /* table header / hover rows */
+  --muted-foreground: oklch(0.53 0.028 161);   /* secondary text, labels */
+  --accent: oklch(0.9 0.052 154);              /* bright mint accent — active nav, highlights */
+  --accent-foreground: oklch(0.29 0.065 163);
+  --destructive: oklch(0.55 0.19 27);          /* proper red for destructive actions */
+  --destructive-foreground: oklch(0.98 0.01 27);
+
+  --border: oklch(0.89 0.022 158);             /* light green-grey hairlines */
+  --input: oklch(0.91 0.018 158);
+  --ring: oklch(0.61 0.09 156);                /* focus rings, link-ish green */
+
+  --chart-1: oklch(0.51 0.105 153);
+  --chart-2: oklch(0.61 0.09 156);
+  --chart-3: oklch(0.61 0.13 76);
+  --chart-4: oklch(0.35 0.08 163);
+  --chart-5: oklch(0.9 0.052 154);
+
+  --sidebar: oklch(0.26 0.055 162);            /* deep green sidebar kept from the dark theme */
+  --sidebar-foreground: oklch(0.96 0.035 153);
+  --sidebar-primary: oklch(0.9 0.052 154);
+  --sidebar-primary-foreground: oklch(0.26 0.055 162);
+  --sidebar-accent: oklch(0.35 0.08 163);
+  --sidebar-accent-foreground: oklch(0.96 0.035 153);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.61 0.09 156);
 }
 
 .dark {

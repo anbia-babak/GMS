@@ -2,32 +2,55 @@ import PlanSearchFilter from "./PlanSearchFilter";
 import Button from "../Dashboard/Button";
 
 
-function AddMembershipModal({onClose}) {
+
+function AddMembershipModal({onClose, onMembershipAssigned}) {
+
+    const fieldClass = "h-11 w-full rounded-md border border-[#8EB69B]/40 bg-[#0B2B26] px-3 text-sm text-[#DAF1DE] outline-none transition focus:border-[#8EB69B] focus:ring-2 focus:ring-[#8EB69B]/20";
+    const labelClass = "mb-2 block text-sm font-semibold text-[#DAF1DE]";
 
     return(
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="w-full max-w-lg rounded-2x1 bg-[#163832] p-6 shadow-2x1">
-
-                <div className="flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#051F20]/70 px-4 py-6 backdrop-blur-sm">
+            <div className="max-h-[calc(100vh-3rem)] w-full max-w-lg overflow-y-auto rounded-lg border border-[#8EB69B]/25 bg-[#163832] p-6 shadow-2xl sm:p-7">
+                <div className="flex items-center justify-between border-b border-[#8EB69B]/25 pb-4">
                     <h2 className="text-xl font-semibold text-[#DAF1DE]">Assign Membership</h2>
-                    <button onClick={onClose} className="text-[#8EB69B] hover:text-white">x</button>
+                    {/* Necessary: type prevents this close control from submitting the form. */}
+                    <button type="button" onClick={onClose} aria-label="Close modal" className="flex h-9 w-9 items-center justify-center rounded-md text-[#8EB69B] transition-colors hover:bg-[#235347] hover:text-[#DAF1DE]">×</button>
                 </div>
-                <form action="#">
-                    <p>Member: Somenoe</p>
 
-                    <label htmlFor="membershipPlan">Membership Plan:</label>
-                    <PlanSearchFilter id="membershipPlan"/>
+                <form action="#" className="mt-5 space-y-4" onSubmit={(event)=>{
+                    event.preventDefault();
 
-                    <label htmlFor="startDate">Start Date:</label>
-                    <input type="date" />
+                    // ASSIGN MEMBERSHIP LOGIC
 
-                    <label htmlFor="expirationDate">Expiration Date:</label>
-                    {/* <p>Should be Calculated Automatically its expiration date. But NOT NOW</p> */}
-                    <p>2026/10/25</p>
+                    // It CLOSES AssignMembershipModal and OPENS AddPaymentModal; WHEN the button is SUBMITTED!
+                    onMembershipAssigned();
+                }}>
+                    <p className="rounded-md border border-[#8EB69B]/30 bg-[#0B2B26] px-3 py-3 text-sm font-medium text-[#DAF1DE]">Member: Someone</p>
 
-                    <Button buttomName="Assign Membership" buttonType="submit"/>
-                    {/* Modal's Close Button: */}
-                    <Button buttonName="Close" type="button" callback={onClose}/>
+                    <div>
+                        <label htmlFor="membershipPlan" className={labelClass}>Membership Plan:</label>
+                        {/* Necessary: the wrapper forces the existing filter control to fill the modal width. */}
+                        <div className="w-full [&>*]:w-full [&_input]:w-full [&_select]:w-full">
+                            <PlanSearchFilter id="membershipPlan"/>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label htmlFor="startDate" className={labelClass}>Start Date:</label>
+                        <input type="date" id="startDate" className={fieldClass} />
+                    </div>
+
+                    <div>
+                        <label htmlFor="expirationDate" className={labelClass}>Expiration Date:</label>
+                        {/* Should be calculated automatically later. */}
+                        <p id="expirationDate" className="rounded-md border border-[#8EB69B]/30 bg-[#0B2B26] px-3 py-3 text-sm text-[#8EB69B]">2026/10/25</p>
+                    </div>
+
+                    <div className="flex flex-col-reverse gap-3 border-t border-[#8EB69B]/25 pt-5 sm:flex-row sm:justify-end">
+                        <Button buttonName="Close" buttonType="button" buttonSign="" callback={onClose}/>
+                        {/* Necessary: corrected the buttonName spelling so the label displays. */}
+                        <Button buttonName="Assign Membership" buttonType="submit" buttonSign="+"/>
+                    </div>
                 </form>
             </div>
         </div>

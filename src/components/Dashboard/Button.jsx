@@ -9,7 +9,7 @@ function Button(props) {
             shadow-primary/15 transition hover:bg-foreground focus:outline-none focus:ring-2 
             focus:ring-primary focus:ring-offset-2 
             focus:ring-offset-background"
-            ><span className="text-lg leading-none" aria-hidden="true">+</span>
+            ><span className="text-lg leading-none" aria-hidden="true">{props.buttonSign}</span>
             {props.buttonName}</button>
     );
 };

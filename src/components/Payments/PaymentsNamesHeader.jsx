@@ -3,8 +3,8 @@
 function PaymentsNamesHeader(props){
 
     return(
-        <div>
-            <p>{props.label}</p>   
+        <div className="text-left">
+            <p className="text-xs font-bold uppercase text-muted-foreground">{props.label}</p>   
         </div>
     );
 };

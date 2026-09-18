@@ -211,7 +211,7 @@ const mockData = {
         {label: "Amount"},
         {label: "Date"},
         {label: "Method"},
-        {label: "View"},
+        {label: "Action"},
     ],
     payment : [
         {

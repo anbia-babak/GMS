@@ -25,12 +25,13 @@ function Payments(){
     }
 
     return(
-        <section>
-            <div>
-                <p>Payments</p>
-                <p>Manage and Track member Payments</p>
+        <section className="min-h-screen bg-background px-5 py-8 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl">
+                <p className="mb-1 text-sm font-medium text-primary">Payment management</p>
+                <p className="text-3xl font-bold tracking-tight text-foreground">Payments</p>
+                <p className="mt-1 text-sm text-muted-foreground">Manage and Track member Payments</p>
             </div>
-            <div>
+            <div className="mx-auto mt-4 flex max-w-7xl justify-end">
                 <Button buttonName="Add Payment" callback={handleAddPaymentClick}/>
             </div>
             {/* Showing The AppPaymentModal: */}
@@ -40,24 +41,24 @@ function Payments(){
                 }}/>
             )}
 
-            <div>
+            <div className="mx-auto mt-7 grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {paymentsOverview.map((card)=>(
                     <SummaryCard key={card.id} {...card}/>
                 ))}
             </div>
 
-            <div>
+            <div className="mx-auto mt-6 flex max-w-7xl min-w-0 items-center gap-3 overflow-x-auto pb-1">
                 <Searchbar/>
                 <SearchingFilters/>
             </div>
 
-            <div>
-                <div>
+            <div className="mx-auto mt-6 max-w-7xl overflow-x-auto rounded-xl border border-border bg-card shadow-lg shadow-black/10">
+                <div className="grid min-w-[900px] grid-cols-[0.7fr_1.3fr_1.3fr_0.9fr_1fr_0.9fr_0.7fr] items-center gap-4 border-b border-border bg-muted/60 px-5 py-3">
                     {PaymentNameHeaders.map((name)=>(
                         <PaymentsNamesHeader label={name.label}/>
                     ))}
                 </div>
-                <div>
+                <div className="min-w-[900px]">
                     {payment.map((card)=>(
                         <PaymentInfoCard key={card.id} {...card}/>
                     ))}

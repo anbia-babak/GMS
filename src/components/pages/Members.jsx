@@ -6,6 +6,8 @@ import mockData from "../../data/mockData";
 import Button from "../Dashboard/Button";
 import { useState } from "react";
 import AddMemberModal from "../members/AddMemberModal";
+import AddMembershipModal from "../Memberships/AddMembershipModal";
+import AddPaymentModal from "../Payments/AddPaymentModal";
 
 
 function Members(){
@@ -13,8 +15,12 @@ function Members(){
     // Tracking AddMemberModal state:
     const [showAddMember, setShowAddMember] = useState(false);
 
+    // Tracking AssignMembership and AddPayment States to CONNECT all three MODALS TOGETHER:
+    const [showAssignMembership, setShowAssignMembership] = useState(false);
+    const [showAddPayment, setShowAddPAyment] = useState(false);
+
     // Hanndling Add New Member Click:
-    function handleAddShowMemberClick (){
+    function handleAddShowMemberClick (){+
         setShowAddMember(true);
     }
 
@@ -35,6 +41,32 @@ function Members(){
                 {showAddMember && (
                     <AddMemberModal onClose={()=>{
                         setShowAddMember(false);
+                    }}
+                    // 
+                    onMemberAdded={()=>{
+                        setShowAddMember(false);
+                        setShowAssignMembership(true);
+                    }}
+                    />
+                )}
+
+                {/*  */}
+                {showAssignMembership && (
+                        <AddMembershipModal onClose={()=>{
+                            setShowAssignMembership(false);
+                        }}
+                        
+                        onMembershipAssigned={()=>{
+                            setShowAssignMembership(false);
+                            setShowAddPAyment(true);
+                        }}
+                        /> 
+                )}
+
+                {/*  */}
+                {showAddPayment && (
+                    <AddPaymentModal onClose={()=>{
+                        setShowAddPAyment(false);
                     }}/>
                 )}
 
