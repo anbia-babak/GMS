@@ -1,7 +1,7 @@
-import Searchbar from "../members/Searchbar";
-import MembersNavigation from "../members/MembersNavigation";
-import MembersNamesHeader from "../members/MembersNamesHeader";
-import MemberInfoCard from "../members/MemberInfoCard";
+import Searchbar from "../Members/Searchbar";
+import MembersNavigation from "../Members/MembersNavigation";
+import MembersNamesHeader from "../Members/MembersNamesHeader";
+import MemberInfoCard from "../Members/MemberInfoCard";
 import mockData from "../../data/mockData";
 import Button from "../Dashboard/Button";
 import { useState } from "react";
@@ -36,7 +36,7 @@ function Members(){
                     </div>
                     <Searchbar />
                 </header>
-                <Button buttonName="New Member" callback={handleAddShowMemberClick}/>
+                <Button buttonName="New Member" buttonSign="+" callback={handleAddShowMemberClick}/>
                 {/* Showing The Add Members Modal:*/}
                 {showAddMember && (
                     <AddMemberModal onClose={()=>{

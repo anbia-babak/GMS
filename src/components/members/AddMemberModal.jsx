@@ -70,7 +70,7 @@ function AddMemberModal({onClose, onMemberAdded}) {
 
                     <div className="flex flex-col-reverse gap-3 border-t border-[#8EB69B]/25 pt-5 sm:col-span-2 sm:flex-row sm:justify-end">
                         <Button buttonName="Close" buttonType="button" buttonSign="" callback={onClose} />
-                        <Button buttonName="Add Member" buttonType="submit" buttonSign="+" />
+                        <Button buttonName="Add Member" buttonType="submit" buttonSign="" />
                     </div>
                 </form>
             </div>

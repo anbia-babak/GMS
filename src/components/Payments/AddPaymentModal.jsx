@@ -48,7 +48,7 @@ function AddPaymentModal({onClose}) {
                     </div>
 
                     <div className="flex justify-end border-t border-[#8EB69B]/25 pt-5">
-                        <Button buttonName="Record Payment" buttonType="submit" buttonSign="+"/>
+                        <Button buttonName="Record Payment" buttonType="submit" buttonSign=""/>
                     </div>
                 </form>
             </div>

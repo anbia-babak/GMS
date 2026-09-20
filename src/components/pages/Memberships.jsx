@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import SummaryCard from "../Dashboard/SummaryCard";
 import Button from "../Dashboard/Button";
-import Searchbar from "../members/Searchbar";
+import Searchbar from "../Members/Searchbar";
 import SearchingFilters from "../Memberships/SearchingFilters";
 import MembershipNamesHeader from "../Memberships/MembershipNamesHeader";
 import MembershipInfoCard from "../Memberships/MembershipInfoCard";
@@ -71,7 +71,7 @@ const updatePlan = (nextPlan) => {
                         <p className="mt-1 text-sm text-muted-foreground">Manage and track member memberships.</p>
                     </div>
                     <div className="mt-4">
-                        <Button buttonName="Assign Membership" callback={handleAssignMembershipClick} /> 
+                        <Button buttonName="Assign Membership" buttonSign="+" callback={handleAssignMembershipClick} /> 
                     </div>
 
                     {/* Showing The AddMembershipModal: */}

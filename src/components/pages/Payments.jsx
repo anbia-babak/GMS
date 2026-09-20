@@ -2,7 +2,7 @@ import { useState } from "react";
 import mockData from "../../data/mockData";
 import SummaryCard from "../Dashboard/SummaryCard";
 import Button from "../Dashboard/Button";
-import Searchbar from "../members/Searchbar";
+import Searchbar from "../Members/Searchbar";
 import SearchingFilters from "../Memberships/SearchingFilters";
 import PaymentsNamesHeader from "../Payments/PaymentsNamesHeader";
 import PaymentInfoCard from "../Payments/PaymentInfoCard";
@@ -32,7 +32,7 @@ function Payments(){
                 <p className="mt-1 text-sm text-muted-foreground">Manage and Track member Payments</p>
             </div>
             <div className="mx-auto mt-4 flex max-w-7xl justify-end">
-                <Button buttonName="Add Payment" callback={handleAddPaymentClick}/>
+                <Button buttonName="Add Payment" buttonSign="+" callback={handleAddPaymentClick}/>
             </div>
             {/* Showing The AppPaymentModal: */}
             {showPaymentModal && (

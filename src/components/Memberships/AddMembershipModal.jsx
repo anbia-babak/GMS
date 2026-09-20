@@ -49,7 +49,7 @@ function AddMembershipModal({onClose, onMembershipAssigned}) {
                     <div className="flex flex-col-reverse gap-3 border-t border-[#8EB69B]/25 pt-5 sm:flex-row sm:justify-end">
                         <Button buttonName="Close" buttonType="button" buttonSign="" callback={onClose}/>
                         {/* Necessary: corrected the buttonName spelling so the label displays. */}
-                        <Button buttonName="Assign Membership" buttonType="submit" buttonSign="+"/>
+                        <Button buttonName="Assign Membership" buttonType="submit" buttonSign=""/>
                     </div>
                 </form>
             </div>

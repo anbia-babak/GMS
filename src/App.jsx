@@ -4,6 +4,8 @@ import Members from "./components/pages/Members";
 import MainLayout from "./components/layouts/MainLayout";
 import Memberships from "./components/pages/Memberships";
 import Payments from "../src/components/pages/Payments";
+import Reports from "./components/pages/Reports";
+import Settings from "./components/pages/Settings";
 
 
 function App() {
@@ -33,6 +35,14 @@ function App() {
         path: "/payments",
         element: <Payments />,
       },
+      {
+        path: "/reports",
+        element: <Reports />,
+      },
+      {
+        path: "/settings",
+        element: <Settings />,
+      }
     ],
   },
 ]);

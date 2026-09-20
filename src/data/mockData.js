@@ -277,7 +277,37 @@ const mockData = {
             method: "cash",
             action: "View",
         },
-    ]
+    ],
+    rMembers : [
+        { id: 1, name: "Ahmad Rahimi", phone: "+93 700 000 001", joined: "2026-01-10", status: "Active" },
+        { id: 2, name: "Sara Ahmadi", phone: "+93 700 000 002", joined: "20224-07-03", status: "Active" },
+        { id: 3, name: "Omid Karimi", phone: "+93 700 000 003", joined: "2023-10-18", status: "Expired" },
+        { id: 4, name: "Ahmad Khan", phone: "+93 700 000 004", joined: "2024-08-18", status: "Active" },
+        { id: 5, name: "Qader Shrifi", phone: "+93 700 000 005", joined: "2024-02-18", status: "Expiring Soon" },
+        { id: 6, name: "Sabawoon Kakar", phone: "+93 700 000 006", joined: "2025-5-18", status: "Active" },
+        { id: 7, name: "Najib Khan", phone: "+93 700 000 007", joined: "2026-01-18", status: "Expired" },
+        { id: 8, name: "Mahmood Safi", phone: "+93 700 000 008", joined: "2026-02-18", status: "Active" },
+        { id: 9, name: "Samim Safi", phone: "+93 700 000 009", joined: "2026-04-18", status: "Active" },
+
+    ],
+    rMemberships : [
+        { id: 1, member: "Ahmad Rahimi", plan: "Monthly", start: "2026-09-01", expires: "2026-10-01", status: "Active" },
+        { id: 2, member: "Sara Ahmadi", plan: "3 Months", start: "2026-08-15", expires: "2026-11-15", status: "Active" },
+        { id: 3, member: "Omid Karimi", plan: "Monthly", start: "2026-09-05", expires: "2026-10-05", status: "Active" },
+        { id: 4, member: "Ahmad Khan", plan: "Monthly", start: "2024-08-18", expires: "2026-7-05", status: "Active" },
+        { id: 5, member: "Qader Shrifi", plan: "Monthly", start: "2024-02-18", expires: "2026-9-28", status: "Expiring Soon" },
+        { id: 6, member: "Sabawoon Kakar", plan: "6 Months", start: "2025-5-18", expires: "2026-7-10", status: "Active" },
+        { id: 7, member: "Najib Khan", plan: "3 Months", start: "2026-01-18", expires: "2026-1-16", status: "Expired" },
+        { id: 8, member: "Mahmood Safi", plan: "Yearly", start: "2026-02-18", expires: "2026-12-05", status: "Active" },
+        { id: 9, member: "Samim Safi", plan: "Yearly", start: "2026-04-18", expires: "2026-12-05", status: "Active" },
+    ],
+    rPayments : [
+        { id: 1, date: "2026-09-01", member: "Ahmad Rahimi", amount: 3000, method: "Cash" },
+        { id: 2, date: "2026-09-05", member: "Omid Karimi", amount: 3000, method: "Card" },
+        { id: 3, date: "2026-09-10", member: "Hamed Yousufi", amount: 3000, method: "Cash" },
+        { id: 4, date: "2026-09-12", member: "Sara Ahmadi", amount: 1300, method: "Card" },
+        { id: 5, date: "2026-09-15", member: "Laila Nazari", amount: 3000, method: "Cash" },
+    ],
 };
 
 export default mockData;
