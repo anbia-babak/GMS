@@ -15,7 +15,7 @@ function Dashboard(){
             <main className="min-w-0 flex-1 p-5 sm:p-6 lg:p-8">
 
                 <header className="mb-6">
-                    <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Manage Your Gym Business</h1>
+                    <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">Manage Your Gym Business</h1>
                     <p className="mt-1 text-sm text-muted-foreground">Welcome back! here's your gym business overview.</p>
                 </header>
 

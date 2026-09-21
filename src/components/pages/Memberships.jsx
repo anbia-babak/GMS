@@ -67,7 +67,7 @@ const updatePlan = (nextPlan) => {
                 <header className="mb-7">
                     <div>
                         <p className="mb-1 text-sm font-medium text-primary">Membership management</p>
-                        <h1 className="text-3xl font-bold tracking-tight text-foreground">Memberships</h1>
+                        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Memberships</h1>
                         <p className="mt-1 text-sm text-muted-foreground">Manage and track member memberships.</p>
                     </div>
                     <div className="mt-4">

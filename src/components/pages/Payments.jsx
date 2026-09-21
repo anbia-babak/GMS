@@ -28,7 +28,7 @@ function Payments(){
         <section className="min-h-screen bg-background px-5 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
                 <p className="mb-1 text-sm font-medium text-primary">Payment management</p>
-                <p className="text-3xl font-bold tracking-tight text-foreground">Payments</p>
+                <p className="text-3xl font-extrabold tracking-tight text-foreground">Payments</p>
                 <p className="mt-1 text-sm text-muted-foreground">Manage and Track member Payments</p>
             </div>
             <div className="mx-auto mt-4 flex max-w-7xl justify-end">

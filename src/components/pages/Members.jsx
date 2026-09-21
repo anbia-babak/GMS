@@ -31,7 +31,7 @@ function Members(){
                 <header className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
                         <p className="mb-1 text-sm font-medium text-primary">Member directory</p>
-                        <h1 className="text-3xl font-bold tracking-tight text-foreground">Members</h1>
+                        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Members</h1>
                         <p className="mt-1 text-sm text-muted-foreground">View and manage your gym members.</p>
                     </div>
                     <Searchbar />
