@@ -3,6 +3,7 @@ import { useState } from "react";
 import ReportTabs from "../Reports/ReportTabs";
 import { IncomeReport, MembersTable, MembershipsTable } from "../Reports/ReportTables";
 import mockData from "../../data/mockData";
+import {WalletCards, ChartNoAxesCombined} from "lucide-react";
 
 
 function Reports() {

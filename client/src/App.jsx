@@ -51,3 +51,11 @@ function App() {
 }
 
 export default App
+{/* <UserPlus /> add member */}
+{/* <UserCheck /> active members */}
+{/* <UserX /> expired members */}
+{/* <Wallet /> budget */}
+{/* <WalletCards /> assign membership */}
+{/* <UserRoundGroup /> total members */}
+{/* <CalendarDays /> */}
+{/* <ChartNoAxesCombined /> income */}

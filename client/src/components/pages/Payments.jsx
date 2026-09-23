@@ -7,7 +7,7 @@ import SearchingFilters from "../Memberships/SearchingFilters";
 import PaymentsNamesHeader from "../Payments/PaymentsNamesHeader";
 import PaymentInfoCard from "../Payments/PaymentInfoCard";
 import AddPaymentModal from "../Payments/AddPaymentModal";
-
+import {Wallet, CalendarDays, WalletCards} from "lucide-react";
 
 
 function Payments(){
@@ -27,19 +27,23 @@ function Payments(){
     return(
         <section className="min-h-screen bg-background px-5 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
-                <p className="mb-1 text-sm font-medium text-primary">Payment management</p>
-                <p className="text-3xl font-extrabold tracking-tight text-foreground">Payments</p>
-                <p className="mt-1 text-sm text-muted-foreground">Manage and Track member Payments</p>
-            </div>
-            <div className="mx-auto mt-4 flex max-w-7xl justify-end">
-                <Button buttonName="Add Payment" buttonSign="+" callback={handleAddPaymentClick}/>
-            </div>
+
+
+                <header className="mb-7 flex justify-between gap-4 sm:flex-row sm:items-end">
+                    <div>
+                        <p className="mb-1 text-sm font-medium text-primary">Payment management</p>
+                        <p className="text-3xl font-extrabold tracking-tight text-foreground">Payments</p>
+                        <p className="mt-1 text-sm text-muted-foreground">Manage and Track member Payments</p>
+                    </div>
+                        <Button buttonName="Add Payment" buttonSign="+" callback={handleAddPaymentClick}/>
+                             
             {/* Showing The AppPaymentModal: */}
             {showPaymentModal && (
                 <AddPaymentModal onClose={()=>{
                     setShowPaymentModal(false);
                 }}/>
             )}
+                </header>   
 
             <div className="mx-auto mt-7 grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {paymentsOverview.map((card)=>(
@@ -64,6 +68,7 @@ function Payments(){
                     ))}
                 </div>
             </div>
+        </div>
         </section>
     );
 };

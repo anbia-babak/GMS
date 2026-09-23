@@ -8,6 +8,7 @@ import { useState } from "react";
 import AddMemberModal from "../members/AddMemberModal";
 import AddMembershipModal from "../Memberships/AddMembershipModal";
 import AddPaymentModal from "../Payments/AddPaymentModal";
+import {UserPlus} from "lucide-react";
 
 
 function Members(){
@@ -34,9 +35,9 @@ function Members(){
                         <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Members</h1>
                         <p className="mt-1 text-sm text-muted-foreground">View and manage your gym members.</p>
                     </div>
-                    <Searchbar />
+                    <Button buttonName="New Member" buttonSign="+" callback={handleAddShowMemberClick}/>
+                    
                 </header>
-                <Button buttonName="New Member" buttonSign="+" callback={handleAddShowMemberClick}/>
                 {/* Showing The Add Members Modal:*/}
                 {showAddMember && (
                     <AddMemberModal onClose={()=>{
@@ -70,8 +71,10 @@ function Members(){
                     }}/>
                 )}
 
-            <div className="mb-5">
+            <div className="mb-5 flex justify-between gap-4 sm:flex-row sm:items-end">
                 <MembersNavigation />
+                <Searchbar />
+
             </div>
             <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-lg shadow-black/10">
                 <MembersNamesHeader />

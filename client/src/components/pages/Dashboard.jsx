@@ -3,7 +3,7 @@ import IncomeChart from "../Dashboard/IncomeChart";
 import InfoRow from "../Dashboard/InfoRow";
 import MemberShipOverview from "../Dashboard/MemberShipOverview";
 import SummaryCard from "../Dashboard/SummaryCard";
-
+import {UserCheck, UserX, Wallet} from "lucide-react";
 
 
 function Dashboard(){

@@ -7,6 +7,7 @@ import MembershipNamesHeader from "../Memberships/MembershipNamesHeader";
 import MembershipInfoCard from "../Memberships/MembershipInfoCard";
 import mockData from "../../data/mockData";
 import AddMembershipModal from "../Memberships/AddMembershipModal";
+import {UserCheck, UserX, UserRoundGroup, WalletCards} from "lucide-react";
 
 
 
@@ -64,15 +65,13 @@ const updatePlan = (nextPlan) => {
     return(
         <section className="min-h-screen bg-background px-5 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
-                <header className="mb-7">
+                <header className="mb-7 flex justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
                         <p className="mb-1 text-sm font-medium text-primary">Membership management</p>
                         <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Memberships</h1>
                         <p className="mt-1 text-sm text-muted-foreground">Manage and track member memberships.</p>
                     </div>
-                    <div className="mt-4">
-                        <Button buttonName="Assign Membership" buttonSign="+" callback={handleAssignMembershipClick} /> 
-                    </div>
+                    <Button buttonName="Assign Membership" buttonSign="+" callback={handleAssignMembershipClick} /> 
 
                     {/* Showing The AddMembershipModal: */}
                     {showAddMembership &&(
