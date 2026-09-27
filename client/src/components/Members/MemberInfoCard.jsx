@@ -1,4 +1,3 @@
-import { Link } from "react-router";
 import avatar1 from "../../assets/user-avatars/user-avatar-1.JPG";
 import avatar2 from "../../assets/user-avatars/user-avatar-2.JPG";
 import avatar3 from "../../assets/user-avatars/user-avatar-3.JPG";
@@ -6,6 +5,7 @@ import avatar4 from "../../assets/user-avatars/user-avatar-4.JPG";
 import avatar5 from "../../assets/user-avatars/user-avatar-5.JPG";
 import avatar6 from "../../assets/user-avatars/user-avatar-6.JPG";
 import avatar7 from "../../assets/user-avatars/user-avatar-7.JPG";
+import Button from "../Dashboard/Button";
 
 const avatarById = {
     "001": avatar1,
@@ -42,7 +42,7 @@ function MemberInfoCard(props){
                         <span className={`h-2.5 w-2.5 rounded-full ${statusDotColors[props.status] ?? "bg-muted-foreground"}`} aria-hidden="true" />
                         {props.status}
                     </p>
-                    <Link to="#" className="inline-flex w-[68px] shrink-0 items-center justify-center rounded-lg px-2 py-1 text-sm font-semibold text-primary transition-colors hover:bg-accent hover:text-foreground">View</Link>
+                    <Button buttonName="View" buttonType="button" buttonSign="" callback={()=> props.onView(props.member)}/>
                 </div>
         </div>
     );

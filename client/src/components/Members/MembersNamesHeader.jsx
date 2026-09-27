@@ -19,7 +19,6 @@ function MembersNamesHeader(){
                     Status: "w-[170px] shrink-0",
                 }[item.label]}>{item.label}</p>
             ))}
-            <span className="w-[68px] shrink-0 text-center">Action</span>
         </div>
     );
 };
