@@ -7,6 +7,7 @@ import MembershipNamesHeader from "../Memberships/MembershipNamesHeader";
 import MembershipInfoCard from "../Memberships/MembershipInfoCard";
 import mockData from "../../data/mockData";
 import AddMembershipModal from "../Memberships/AddMembershipModal";
+import RenewMembershipModal from "../Memberships/RenewMembershipModal";
 import {UserCheck, UserX, UserRoundGroup, WalletCards} from "lucide-react";
 
 
@@ -15,6 +16,11 @@ function Memberships(){
 const { memberships } = mockData;
 // Tracking AddMembershipModal State:
 const [showAddMembership, setShowAddMembership] = useState(false);
+
+// Tracking RenewMembershipModal State:
+const [showRenewMembership, setShowRenewMembership] = useState(false);
+// Tracking Which membership card is clicked:
+const [selectedMembership, setSelectedMembership] = useState();
 
 
 const [searchTerm, setSearchTerm] = useState("");
@@ -45,6 +51,11 @@ const summaryCards = [
 // Handling Assign Membership Click:
 function handleAssignMembershipClick() {
     setShowAddMembership(true);
+}
+
+function handleRenewMembershipClick(membership) {
+    setShowRenewMembership(true);
+    setSelectedMembership(membership)
 }
 
 const updateSearch = (event) => {
@@ -79,6 +90,13 @@ const updatePlan = (nextPlan) => {
                             setShowAddMembership(false);
                         }}/>
                     )}
+
+                    {showRenewMembership &&(
+                        <RenewMembershipModal 
+                            onClose={()=> setShowRenewMembership(false)}
+                            onRenewedMembership={()=>setShowRenewMembership(false)}
+                        />
+                    )}
                 </header>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     {summaryCards.map((card) => (
@@ -93,7 +111,7 @@ const updatePlan = (nextPlan) => {
                     <MembershipNamesHeader />
                     <div className="space-y-3 p-3 sm:p-4">
                         {visibleMemberships.length > 0 ? visibleMemberships.map((card) => (
-                            <MembershipInfoCard key={card.id} {...card}/>
+                            <MembershipInfoCard key={card.id} onView={handleRenewMembershipClick} {...card}/>
                         )) : (
                             <p className="min-w-[800px] rounded-xl border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">No memberships match these filters.</p>
                         )}

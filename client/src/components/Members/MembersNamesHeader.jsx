@@ -2,7 +2,7 @@ const nameHeaders = [
     {label: "id"},
     {label: "Name"},
     {label: "Payment"},
-    {label: "Payed Time"},
+    {label: "Payment Date"},
     {label: "Status"},
 ]
 
@@ -15,7 +15,7 @@ function MembersNamesHeader(){
                     id: "w-[72px] shrink-0",
                     Name: "w-[240px] shrink-0",
                     Payment: "w-[130px] shrink-0",
-                    "Payed Time": "w-[150px] shrink-0",
+                    'Payment Date': "w-[170px] shrink-0",
                     Status: "w-[170px] shrink-0",
                 }[item.label]}>{item.label}</p>
             ))}

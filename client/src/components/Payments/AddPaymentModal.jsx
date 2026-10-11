@@ -16,7 +16,10 @@ function AddPaymentModal({onClose}) {
                 </div>
 
                 <p className="mt-4 text-sm text-[#8EB69B]">Record Payment</p>
-                <form action="#" className="mt-5 space-y-4">
+                <form action="#" className="mt-5 space-y-4" onSubmit={(event)=>{
+                    event.preventDefault();
+                    
+                }}>
                     <div>
                         <label htmlFor="member" className={labelClass}>Member:</label>
                         <input type="text" id="member" className={fieldClass} />

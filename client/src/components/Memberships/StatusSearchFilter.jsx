@@ -8,7 +8,7 @@ function StatusSearchFilter (status, onStatusChange,){
         <select name="status" id="memberStatus" value={status} onChange={(event) => onStatusChange(event.target.value)} 
         className="h-11 w-25 appearance-none rounded-xl border !border-[#235347] !bg-[#163832] py-2 pl-4 pr-10 
         text-sm text-card-foreground outline-none transition !focus:border-primary focus:ring-2 focus:ring-primary/20">
-            <option value="All" className="bg-[#163832]">Status: All</option>
+            <option value="All" className="bg-[#163832]">All</option>
             <option value="Active" className="bg-[#163832]">Active</option>
             <option value="Expiring Soon" className="bg-[#163832]">Expiring Soon</option>
             <option value="Expired" className="bg-[#163832]">Expired</option>

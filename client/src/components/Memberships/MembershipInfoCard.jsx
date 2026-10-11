@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import Button from "../Dashboard/Button";
 
 function MembershipInfoCard(props){
     const statusDotColors = {
@@ -17,7 +17,7 @@ function MembershipInfoCard(props){
                 <span className={`h-2.5 w-2.5 rounded-full ${statusDotColors[props.status] ?? "bg-muted-foreground"}`} aria-hidden="true" />
                 {props.status}
             </p>
-            <Link to="#" className="inline-flex w-[68px] shrink-0 items-center justify-center rounded-lg px-2 py-1 text-sm font-semibold text-primary transition-colors hover:bg-accent hover:text-foreground">Edit</Link>
+            <Button buttonName="Renew" buttonType="button" callback={()=> props.onView(props.membership)}/>
         </div>
     );
 };

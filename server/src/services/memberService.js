@@ -31,7 +31,7 @@ export async function getSpecificMember (memberId){
 
 export async function editSpecificMember(memberId, newData) {
     
-    // The fields which the woner changes must include only these fields:
+    // The fields which the owner changes must include only these fields:
     const allowedChangeFields = [
         "first_name", "last_name", "phone", "address", "gender", "date_of_birth", "join_date"
     ];

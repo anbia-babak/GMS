@@ -31,13 +31,13 @@ function MemberInfoCard(props){
         <div className="space-y-3 p-3 sm:p-1.5">
                 <div className="flex min-w-[830px] items-center rounded-xl border border-border bg-background/35
                         px-4 py-4 shadow-sm shadow-black/10 transition hover:-translate-y-0.5 hover:border-primary/50 hover:bg-accent/20">
-                    <p className="w-[72px] shrink-0 text-sm font-medium text-muted-foreground">#{props.id}</p>
+                    <p className="w-[72px] shrink-0 text-sm font-medium text-muted-foreground">#{props.member_id}</p>
                     <div className="flex w-[240px] shrink-0 items-center gap-3">
-                        <img src={avatarById[props.id]} alt={`${props.name}'s profile`} className="h-10 w-10 rounded-full border border-border object-cover" />
-                        <p className="font-medium text-card-foreground">{props.name}</p>
+                        <img src={avatarById[props.member_id]} alt={`${props.first_name}'s profile`} className="h-10 w-10 rounded-full border border-border object-cover" />
+                        <p className="font-medium text-card-foreground">{props.first_name} {props.last_name}</p>
                     </div>
                     <p className="w-[130px] shrink-0 text-sm capitalize text-muted-foreground">{props.payment}</p>
-                    <p className="w-[150px] shrink-0 text-sm text-muted-foreground">{props.time}</p>
+                    <p className="w-[170px] shrink-0 text-sm text-muted-foreground">{props.time}</p>
                     <p className="flex w-[170px] shrink-0 items-center gap-2 text-sm font-medium text-card-foreground">
                         <span className={`h-2.5 w-2.5 rounded-full ${statusDotColors[props.status] ?? "bg-muted-foreground"}`} aria-hidden="true" />
                         {props.status}

@@ -4,7 +4,7 @@ import MembersNamesHeader from "../Members/MembersNamesHeader";
 import MemberInfoCard from "../Members/MemberInfoCard";
 import mockData from "../../data/mockData";
 import Button from "../Dashboard/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddMemberModal from "../members/AddMemberModal";
 import AddMembershipModal from "../Memberships/AddMembershipModal";
 import AddPaymentModal from "../Payments/AddPaymentModal";
@@ -12,10 +12,22 @@ import {Truck, UserPlus} from "lucide-react";
 import MemberInfoModal from "../Members/MemberInfoModal";
 import EditMemberModal from "../Members/EditMemberModal";
 import DeactivateConfirmationModal from "../Members/DeactivateConfirmationModal";
+import { getMembers } from "../../services/api/membersApi.js";
 
 
 function Members(){
-    const {members} = mockData;
+    // const {members} = mockData;
+    
+    const [memberss, setMemberss] = useState([]);
+    useEffect(()=>{
+        async function loadMembers() {
+            const data = await getMembers();
+            console.log(data);
+            setMemberss(data);
+        };
+        loadMembers();
+    }, []);
+    
     // Tracking AddMemberModal state:
     const [showAddMember, setShowAddMember] = useState(false);
 
@@ -137,9 +149,13 @@ function Members(){
             </div>
             <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-lg shadow-black/10">
                 <MembersNamesHeader />
-                    {members.map((card)=>(
+                    
+                    {memberss.map((card)=>(
+                        <div key={card.id}>
                        <MemberInfoCard key={card.id} member={card} onView={handleViewMemberInfoClick} {...card}/> 
-                    ))}
+                        </div>
+                    ))};
+                
             </div>
             </div>
         </section>
