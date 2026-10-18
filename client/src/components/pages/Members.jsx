@@ -27,6 +27,8 @@ function Members(){
         };
         loadMembers();
     }, []);
+
+    const [searchTerm, setSearchTerm] = useState("");
     
     // Tracking AddMemberModal state:
     const [showAddMember, setShowAddMember] = useState(false);
@@ -53,7 +55,11 @@ function Members(){
         setShowMemberInfo(true);
         setSelectedMember(member)
     }
-    
+
+    const updateSearch = (event) => {
+    setSearchTerm(event.target.value);
+    };
+
     return(
         <section className="min-h-screen bg-background px-5 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
@@ -144,7 +150,7 @@ function Members(){
             
             <div className="mb-5 flex justify-between gap-4 sm:flex-row sm:items-end">
                 <MembersNavigation />
-                <Searchbar />
+                <Searchbar value={searchTerm} onChange={updateSearch} placeHolder={"Search members"}/>
 
             </div>
             <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-lg shadow-black/10">

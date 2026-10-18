@@ -62,8 +62,40 @@ export async function editSpecificMembership(membershipId, newData){
     }
     const durationMonths = planResult.rows[0].duration_month;
  
+    // Overlap Validation for editing a membership:
+    // A member cannot have two memberships covering the same date.
+    // We check the entire new membership period, not just its start date.
+    // So we find memberships belonging to the same member and then EXCLUDE the membership
+    // being Renewed or Edited so it doesn't Conflict with itself and Checking whether another 
+    // membership's date range overlaps the new data range.!
+
+    // Two date ranges overlap when:
+    // Existing start date <= new expiration date AND Existing membership date >= new start date.
+    // If both are TRUE , at least one day is shared by both memberships ===> 400(Bad Request).
+    // and the expiration date is inclusive (the last valid day).
+    const overlapResult = await pool.query(
+        `SELECT membership_id
+        FROM memberships
+        WHERE member_id = ( 
+        SELECT member_id
+        FROM memberships
+        WHERE membership_id = $1
+        )
+        AND membership_id <> $1
+        AND start_date <= ($2::date + ($3::int * INTERVAL '1 month'))::date
+        AND expiration_date >= $2::date
+        LIMIT 1`,
+        [membershipId, startDate, durationMonths]
+    );
+    if(overlapResult.rows.length > 0){
+        const error = new Error("This membership overlaps with another membership for this member.");
+        error.status = 400;
+        throw error; 
+    }
+
+
     // Becasue the planId , startDate , and the expirationDate are logically related;
-    // WE NEED to refuse to the DYNAMIC Approach which is used for a MEMBER ,
+    // WE NEED to refuse to use the DYNAMIC Approach which is used for a MEMBER ,
     // expirationDate depends on planId + startDate , SO WE NEED to query them explicitly!!
     // update membership + calculate expiration:
 
@@ -221,10 +253,36 @@ export async function renewSpecificMembership(membershipId, newDate, planId) {
         throw error; 
     };
 
-    const currentPlan = planResult.rows[0].plan_id;
     const newStartDate = newDate;
     const newPlan = planId;
     const durationMonth = planResult.rows[0].duration_month;
+
+    // Overlap Validation for editing a membership:
+    // A member cannot have two memberships covering the same date.
+    // We check the entire new membership period, not just its start date.
+    // So we find memberships belonging to the same member and then EXCLUDE the membership
+    // being Renewed or Edited so it doesn't Conflict with itself and Checking whether another 
+    // membership's date range overlaps the new data range.!
+
+    // Two date ranges overlap when:
+    // Existing start date <= new expiration date AND Existing membership date >= new start date.
+    // If both are TRUE , at least one day is shared by both memberships ===> 400(Bad Request).
+    // and the expiration date is inclusive (the last valid day).
+    const overlapResult = await pool.query(
+        `SELECT membership_id
+        FROM memberships
+        WHERE member_id = $1
+        AND membership_id <> $2
+        AND start_date <= ($3::date + ($4::int * INTERVAL '1 month'))::date
+        AND expiration_date >= $3::date
+        LIMIT 1`,
+        [currentMembership.member_id, membershipId, newStartDate, durationMonth]
+    );
+    if(overlapResult.rows.length > 0){
+        const error = new Error("This membership overlaps with another membership for this member.");
+        error.status = 400;
+        throw error; 
+    }
 
     // Checking that a new membership must not start while another membership for the same member is still active:
     const overLappingMembers = await pool.query(
@@ -237,9 +295,10 @@ export async function renewSpecificMembership(membershipId, newDate, planId) {
         LIMIT 1`,
         [newStartDate, currentMembership.member_id, membershipId]
     );
+    
     if(overLappingMembers.rows.length > 0){
         const error = new Error("The member already has a membership covering this start date");
-        error.status = 404;
+        error.status = 400;
         throw error; 
     }
 

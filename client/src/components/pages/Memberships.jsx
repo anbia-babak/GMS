@@ -104,7 +104,7 @@ const updatePlan = (nextPlan) => {
                     ))}
                 </div>
                 <div className="mt-6 flex min-w-0 items-center gap-3 overflow-x-auto pb-1">
-                    <Searchbar value={searchTerm} onChange={updateSearch} placeholder="Search memberships" />
+                    <Searchbar value={searchTerm} onChange={updateSearch} placeHolder="Search memberships" />
                     <SearchingFilters status={status} plan={plan} onStatusChange={updateStatus} onPlanChange={updatePlan} />
                 </div>
                 <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-card shadow-lg shadow-black/10">

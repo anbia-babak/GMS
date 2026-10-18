@@ -15,14 +15,13 @@ function AddPaymentModal({onClose}) {
                     <button type="button" onClick={onClose} aria-label="Close modal" className="flex h-9 w-9 items-center justify-center rounded-md text-[#8EB69B] transition-colors hover:bg-[#235347] hover:text-[#DAF1DE]">×</button>
                 </div>
 
-                <p className="mt-4 text-sm text-[#8EB69B]">Record Payment</p>
                 <form action="#" className="mt-5 space-y-4" onSubmit={(event)=>{
                     event.preventDefault();
                     
                 }}>
                     <div>
                         <label htmlFor="member" className={labelClass}>Member:</label>
-                        <input type="text" id="member" className={fieldClass} />
+                        <input type="search" placeholder="Search by name or phone..." id="member" className={fieldClass} autoComplete="true" />
                     </div>
 
                     <div>
@@ -45,8 +44,8 @@ function AddPaymentModal({onClose}) {
 
                     <div>
                         <label htmlFor="paymentMethod" className={labelClass}>Payment Method:</label>
-                        <select name="paymentMethod" id="paymentMethod" className={fieldClass}>
-                            <option value="cash">Cash</option>
+                        <select name="paymentMethod" id="paymentMethod" value="Cash" className={fieldClass}>
+                            <option value="cash" selected >Cash</option>
                         </select>
                     </div>
 

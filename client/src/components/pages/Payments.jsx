@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import mockData from "../../data/mockData";
 import SummaryCard from "../Dashboard/SummaryCard";
 import Button from "../Dashboard/Button";
@@ -19,9 +19,26 @@ function Payments(){
     const {PaymentNameHeaders} = mockData;
     const {payment} = mockData;
 
+    // const [status, setStatus] = useState("All");
+    // const [plan, setPlan] = useState("All");
+    // const [searchTerm, setSearchTerm] = useState("");
+
+
+    // const filteredMemberships = useMemo(() => memberships.filter((membership) => {
+    // const matchesSearch = membership.member.toLowerCase().includes(searchTerm.toLowerCase());
+    // const matchesStatus = status === "All" || membership.status === status;
+    // const matchesPlan = plan === "All" || membership.plan === plan;
+    // return matchesSearch && matchesStatus && matchesPlan;
+    // }), [paymentss, plan, searchTerm, status]);
+
+
 
     function handleAddPaymentClick(){
         setShowPaymentModal(true);
+    }
+
+    const updateSearch = (event) => {
+    setSearchTerm(event.target.value);
     }
 
     return(
@@ -52,7 +69,7 @@ function Payments(){
             </div>
 
             <div className="mx-auto mt-6 flex max-w-7xl min-w-0 items-center gap-3 overflow-x-auto pb-1">
-                <Searchbar/>
+                <Searchbar placeHolder={"Search payments..."} />
                 <SearchingFilters/>
             </div>
 

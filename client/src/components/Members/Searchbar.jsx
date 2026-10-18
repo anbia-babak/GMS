@@ -1,4 +1,4 @@
-function Searchbar({ value, onChange, placeholder = "Search members" }){
+function Searchbar({ value, onChange, placeHolder}){
 
     return(
         <div className="relative w-full sm:max-w-sm">
@@ -6,10 +6,10 @@ function Searchbar({ value, onChange, placeholder = "Search members" }){
                 <circle cx="11" cy="11" r="6" />
                 <path d="m16 16 4 4" />
             </svg>
-            <input type="search" name="searchMember" id="searchMember"
+            <input type="search" name="search" id="search"
             value={value}
             onChange={onChange}
-            placeholder={placeholder}
+            placeholder={placeHolder}
             className="h-11 w-full rounded-xl border border-border bg-card py-2 pl-11 pr-4 text-sm text-card-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"/>
         </div>
     );
