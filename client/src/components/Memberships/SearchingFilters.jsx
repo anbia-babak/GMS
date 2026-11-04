@@ -1,12 +1,12 @@
 import PlanSearchFilter from "./PlanSearchFilter";
 import StatusSearchFilter from "./StatusSearchFilter";
 
-function SearchingFilters (){
+function SearchingFilters ({ status, plan, plans, onStatusChange, onPlanChange }){
 
     return (
         <div className="flex shrink-0 items-center gap-2">
-            <StatusSearchFilter />
-            <PlanSearchFilter />
+            <StatusSearchFilter status={status} onStatusChange={onStatusChange} />
+            <PlanSearchFilter plan={plan} options={plans} onPlanChange={onPlanChange} />
         </div>    
     );
 };

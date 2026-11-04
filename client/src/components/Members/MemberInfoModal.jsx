@@ -14,32 +14,51 @@ const infoLabels = [
 function MemberInfoModal({member, onClose, onMemberEdited, onMemberDeactivated}) {
     
     return(
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#051F20]/70 px-4 py-6 backdrop-blur-sm">
-            <div className="max-h-[calc(100vh-3rem)] w-full max-w-xl overflow-y-auto rounded-lg border border-[#8EB69B]/25 bg-[#163832] text-primary-foreground p-6 shadow-2xl sm:p-7">
-                <div className="flex items-center justify-between border-b border-[#8EB69B]/25 pb-4">
-                    <h2 className="text-xl font-semibold text-[#DAF1DE]">Member Information</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center
+         overflow-y-auto bg-[#051F20]/70 px-4 py-6 backdrop-blur-sm">
+            <div className="max-h-[calc(100vh-3rem)] w-full max-w-xl
+             overflow-y-auto rounded-lg border border-[#8EB69B]/25 dark:border-gray-200
+              bg-[#163832] dark:bg-white text-[#DAF1DE] dark:text-gray-900 p-6 shadow-2xl sm:p-7">
+                <div className="flex items-center justify-between border-b
+                 border-[#8EB69B]/25 pb-4">
+                    <h2 className="text-xl font-semibold text-[#DAF1DE] dark:text-gray-900">Member Information</h2>
                     {/* Necessary: type prevents this close control from submitting the form. */}
                     <button type="button" onClick={onClose} aria-label="Close modal"
-                    className="flex h-9 w-9 items-center justify-center rounded-md text-[#8EB69B] transition-colors hover:bg-[#235347] hover:text-[#DAF1DE]">×</button>
+                    className="flex h-9 w-9 items-center justify-center
+                     rounded-md text-[#8EB69B] dark:text-gray-600 transition-colors
+                      hover:bg-[#235347] dark:hover:bg-gray-100 hover:text-[#DAF1DE] dark:hover:text-gray-900">×</button>
                 </div>
-                <div className="flex flex-col items-center gap-2 border-b border-inherit py-6 text-center">
-                    <p className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-secondary-foreground">AVATAR</p>
-                    <p className="break-words text-lg font-semibold">Member's Name</p>
-                    <p className="text-xs opacity-70">Member's ID</p>
+                <div className="flex flex-col items-center gap-2 border-b
+                 border-inherit py-6 text-center">
+                    <p className="flex h-16 w-16 items-center justify-center text-[#DAF1DE] dark:text-gray-900
+                     rounded-full bg-secondary text-[10px] font-bold
+                      text-secondary-foreground">AVATAR</p>
+                    <p className="break-words text-lg font-semibold">{member.first_name} {member.last_name}</p>
+                    <p className="text-xs opacity-70">Member #{member.member_id}</p>
                 </div>
                 <div className="py-3">
                     <div className="divide-y divide-border/25">
-                        {infoLabels.map((label)=>(
-                            <div className="grid grid-cols-2 items-start gap-4 py-3 text-sm leading-6">
+                        {infoLabels.map((label) => {
+                            const fieldByLabel = {
+                                "First Name": "first_name", "Last Name": "last_name", Phone: "phone", Gender: "gender",
+                                "Date of Birth": "date_of_birth", Address: "address", "Join Date": "join_date", Status: "status",
+                            };
+                            const value = member[fieldByLabel[label.label]];
+                            return <div key={label.label} className="grid grid-cols-2 items-start gap-4 py-3 text-sm leading-6">
                                 <p className="break-words opacity-70">{label.label}</p>
-                                <p className="min-w-0 break-words text-right font-medium">{label.value}</p>
+                                <p className="min-w-0 break-words text-right
+                                 font-medium">{value ? String(value).slice(0, 10) : "—"}</p>
                             </div>
-                        ))}
+                        })}
                         
                     </div>
                 </div>
                 
-                <div className="flex flex-col gap-3 border-t border-inherit pt-5 sm:flex-row sm:justify-end [&>*]:w-full sm:[&>*]:w-auto [&_button]:min-h-11 [&_button]:rounded-md [&_button]:px-5 [&_button]:text-sm [&_button]:font-semibold">
+                <div className="flex flex-col gap-3 border-t border-inherit
+                 pt-5 sm:flex-row sm:justify-end [&>*]:w-full
+                  sm:[&>*]:w-auto [&_button]:min-h-11 [&_button]:rounded-md
+                   [&_button]:px-5 [&_button]:text-sm
+                    [&_button]:font-semibold">
                 <Button buttonName="Edit" buttonSign="" buttonType="button" callback={onMemberEdited}/>
                 <Button buttonName="Deactivate" buttonSign="" buttonType="button" callback={onMemberDeactivated}/>
                 <Button buttonName="Okay" buttonSign="" buttonType="button" callback={onClose}/>

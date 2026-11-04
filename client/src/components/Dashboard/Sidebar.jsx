@@ -1,10 +1,10 @@
 import { NavLink } from "react-router";
-
+import ThemeToggle from "./ThemeToggle";
 
 const navItems = [
     {label: "Dashboard", path: "/dashboard"},
     {label: "Members", path: "/members"},
-    {label: "Membership", path: "/membership"},
+    {label: "Membership", path: "/memberships"},
     {label: "Payments", path: "/payments"},
     {label: "Reports", path: "/reports"},
     {label: "Settings", path: "/settings"},
@@ -31,7 +31,7 @@ function Sidebar(){
                     <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="2"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12" /><path d="m8 7 2-2M14 19l2-2" /></svg>
                 </div>
                 <div>
-                    <p className="text-sm font-bold tracking-wide">IRON GYM</p>
+                    <p className="text-sm font-bold tracking-wide">SUPER POWER GYM</p>
                     <p className="text-xs text-muted-foreground">Management System</p>
                 </div>
             </div>
@@ -39,18 +39,22 @@ function Sidebar(){
             <nav className="flex-1 space-y-1 px-3 py-2">
                 {navItems.map((item)=>(
                     <NavLink to={item.path} key={item.label}
-                    className={({ isActive }) => `flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${isActive ? "bg-primary text-primary-foreground shadow-md shadow-primary/10" : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"}`}>
+                    className={({ isActive }) => `flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium 
+                    transition-colors ${isActive ? "bg-primary text-primary-foreground shadow-md shadow-primary/10" : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"}`}>
                         <NavigationIcon label={item.label} />
                         {item.label}
                     </NavLink>
                 ))}
             </nav>
 
-            <div className="border-t border-sidebar-border p-3">
-                <a href="#" className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+            <div className="border-t border-sidebar-border p-3 flex item-center justify-between gap-2">
+                <NavLink to="/logout" key="Logout" className="flex items-center gap-3
+                rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors
+                hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
                     <svg viewBox="0 0 24 24" className="h-[18px] w-[18px] fill-none stroke-current" strokeWidth="1.8"><path d="M10 17l5-5-5-5M15 12H3M14 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /></svg>
                     Logout
-                </a>
+                </NavLink>
+                <ThemeToggle />
             </div>
 
         </aside>

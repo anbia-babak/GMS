@@ -310,4 +310,12 @@ const mockData = {
     ],
 };
 
+
+
+
+
+const fruits = ["Apple", "Banana", "Mango"];
+fruits.forEach((fruit)=>{
+    print(fruit);
+})
 export default mockData;

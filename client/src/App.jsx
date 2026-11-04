@@ -6,44 +6,50 @@ import Memberships from "./components/pages/Memberships";
 import Payments from "../src/components/pages/Payments";
 import Reports from "./components/pages/Reports";
 import Settings from "./components/pages/Settings";
+import Login from "./components/pages/Login";
 
 
 function App() {
   const router = createBrowserRouter([
-  {
-    // path: "/",
-    // element: <Dashboard />,
-    element: <MainLayout />,
-    children: [
-      {
-        index: true,
-        element: <Dashboard />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-      {
-        path: "/members",
-        element: <Members />,
-      },
-      {
-        path: "/membership",
-        element: <Memberships />
-      },
-      {
-        path: "/payments",
-        element: <Payments />,
-      },
-      {
-        path: "/reports",
-        element: <Reports />,
-      },
-      {
-        path: "/settings",
-        element: <Settings />,
-      }
-    ],
+    {
+      // Standalone pages (NO sidebar / NO mainLayout)
+      path: "/logout",
+      element: <Login />
+    },
+    {
+      //Main layout wrapper (HAS sidebar and <Outlet />)
+      path: "/",
+      element: <MainLayout />,
+      children: [
+        {
+          index: true,
+          element: <Dashboard />,
+        },
+        {
+          path: "/dashboard",
+          element: <Dashboard />,
+        },
+        {
+          path: "/members",
+          element: <Members />,
+        },
+        {
+          path: "/memberships",
+          element: <Memberships />
+        },
+        {
+          path: "/payments",
+          element: <Payments />,
+        },
+        {
+          path: "/reports",
+          element: <Reports />,
+        },
+        {
+          path: "/settings",
+          element: <Settings />,
+        }
+      ],
   },
 ]);
 
@@ -51,11 +57,3 @@ function App() {
 }
 
 export default App
-{/* <UserPlus /> add member */}
-{/* <UserCheck /> active members */}
-{/* <UserX /> expired members */}
-{/* <Wallet /> budget */}
-{/* <WalletCards /> assign membership */}
-{/* <UserRoundGroup /> total members */}
-{/* <CalendarDays /> */}
-{/* <ChartNoAxesCombined /> income */}

@@ -1,5 +1,7 @@
-import mockData from "../../data/mockData";
+import { useEffect, useState } from "react";
 import { Pie, PieChart, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { getApiErrorMessage } from "../../api/apiClient";
+import { getMembers } from "../../api/membersApi";
 // import { RechartsDevtools } from '@recharts/devtools';
 
 const COLORS = {
@@ -8,11 +10,32 @@ const COLORS = {
   Expired: "var(--accent)",
 };
 
-// #region Sample data
-const {membershipOverview} = mockData;
-// #endregion
+
 function MemberShipOverview() {
-    const total = membershipOverview.reduce((sum, item) => sum + item.value, 0);
+
+    
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [members, setMembers] = useState([]);
+
+  useEffect(() => {
+          async function loadMembers() {
+              try {
+                  // Fetch once, then filter locally so plan names do not need to be converted into invented IDs.
+                  setMembers(await getMembers());
+              } catch (requestError) {
+                  setError(getApiErrorMessage(requestError, "Could not load members. Please try again."));
+              }
+          }
+          loadMembers();
+      }, [refreshKey]);
+
+
+  const membershipOverview = [
+          { name: "Active", value: members.filter((item) => item.status === "Active").length },
+          { name: "Expiring Soon", value: members.filter((item) => item.status === "Expiring Soon").length },
+          { name: "Expired", value: members.filter((item) => item.status === "Expired").length },
+      ];
+  const total = membershipOverview.reduce((sum, item) => sum + item.value, 0);
 
 
   return (
