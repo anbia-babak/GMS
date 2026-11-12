@@ -18,9 +18,9 @@ const statusDotColors = {
 function MemberInfoCard(props){
     const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7];
 
-    const randomNumber =  Math.floor(Math.random() * avatars.length);
-    const randomAvatar = avatars[randomNumber];
-;
+    const avatarNumber =  props.avatar_number || 1;
+    const randomAvatar = avatars[avatarNumber - 1];
+
     return(
         <div className="space-y-3 p-3 sm:p-1.5">
                 <div className="flex min-w-[830px] items-center rounded-xl border border-border bg-background/35

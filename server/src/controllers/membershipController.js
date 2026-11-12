@@ -1,11 +1,12 @@
-import { parse } from "dotenv";
 import { addMembership as addMembershipService} from "../services/membershipService.js";
 import { getSpecificMemberCMemberships as getSpecificMemberCMembershipsService} from "../services/membershipService.js";
 import { editSpecificMembership as editSpecificMembershipService } from "../services/membershipService.js";
 import { getAllMemberships as getAllMembershipsService} from "../services/membershipService.js";
 import { getSpecificMembership as getSpecificMembershipService} from "../services/membershipService.js";
 import { renewSpecificMembership as renewSpecificMembershipService } from "../services/membershipService.js";
-
+import { getMembershipPlans as getMembershipPlansService } from "../services/membershipService.js";
+import { createMembershipPlan as createMembershipPlanService } from "../services/membershipService.js";
+import { updateMembershipPlan as updateMembershipPlanService } from "../services/membershipService.js";
 
 export async function addMembership(req,res) {
     
@@ -155,3 +156,34 @@ export async function renewSpecificMembership(req,res) {
         });
     };
 };
+
+export async function getAllMembershipPlans(req, res, next) {
+  try {
+    const plans = await getMembershipPlansService();
+    res.status(200).json(plans);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function addMembershipPlan(req, res, next) {
+    try {
+        const plan = await createMembershipPlanService(req.body);
+        res.status(201).json(plan);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function editMembershipPlan(req, res, next) {
+    try {
+        const plan = await updateMembershipPlanService(
+            Number(req.params.planId),
+            req.body
+        );
+
+        res.status(200).json(plan);
+    } catch (error) {
+        next(error);
+    }
+}

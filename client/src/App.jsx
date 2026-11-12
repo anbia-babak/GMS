@@ -7,49 +7,72 @@ import Payments from "../src/components/pages/Payments";
 import Reports from "./components/pages/Reports";
 import Settings from "./components/pages/Settings";
 import Login from "./components/pages/Login";
-
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
+//   const router = createBrowserRouter([
+//     {
+//       // Standalone pages (NO sidebar / NO mainLayout)
+//       path: "/logout",
+//       element: <Login />
+//     },
+//     {
+//       //Main layout wrapper (HAS sidebar and <Outlet />)
+//       path: "/",
+//       element: <MainLayout />,
+//       children: [
+//         {
+//           index: true,
+//           element: <Dashboard />,
+//         },
+//         {
+//           path: "/dashboard",
+//           element: <Dashboard />,
+//         },
+//         {
+//           path: "/members",
+//           element: <Members />,
+//         },
+//         {
+//           path: "/memberships",
+//           element: <Memberships />
+//         },
+//         {
+//           path: "/payments",
+//           element: <Payments />,
+//         },
+//         {
+//           path: "/reports",
+//           element: <Reports />,
+//         },
+//         {
+//           path: "/settings",
+//           element: <Settings />,
+//         }
+//       ],
+//   },
+// ]);
   const router = createBrowserRouter([
-    {
-      // Standalone pages (NO sidebar / NO mainLayout)
-      path: "/logout",
-      element: <Login />
-    },
-    {
-      //Main layout wrapper (HAS sidebar and <Outlet />)
-      path: "/",
-      element: <MainLayout />,
-      children: [
-        {
-          index: true,
-          element: <Dashboard />,
-        },
-        {
-          path: "/dashboard",
-          element: <Dashboard />,
-        },
-        {
-          path: "/members",
-          element: <Members />,
-        },
-        {
-          path: "/memberships",
-          element: <Memberships />
-        },
-        {
-          path: "/payments",
-          element: <Payments />,
-        },
-        {
-          path: "/reports",
-          element: <Reports />,
-        },
-        {
-          path: "/settings",
-          element: <Settings />,
-        }
-      ],
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/",
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: "/dashboard", element: <Dashboard /> },
+      { path: "/members", element: <Members /> },
+      { path: "/memberships", element: <Memberships /> },
+      { path: "/payments", element: <Payments /> },
+      { path: "/reports", element: <Reports /> },
+      { path: "/settings", element: <Settings /> },
+    ],
   },
 ]);
 

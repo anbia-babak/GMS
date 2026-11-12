@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Button from "../Dashboard/Button";
+import CustomSelect from "../Dashboard/CustomSelect";
 import { getMembers } from "../../api/membersApi";
 import { getMemberMemberships } from "../../api/membershipsApi";
 import { addPayment } from "../../api/paymentsApi";
@@ -15,6 +16,11 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
     const [members, setMembers] = useState(initialMember ? [initialMember] : []);
     const [memberships, setMemberships] = useState(initialMembership ? [initialMembership] : []);
     const [form, setForm] = useState({ member_id: initialMember?.member_id || "", membership_id: initialMembership?.membership_id || "", amount: "", payment_date: "", payment_method: "Cash" });
+    const [memberSearch, setMemberSearch] = useState(
+    initialMember
+        ? `${initialMember.first_name} ${initialMember.last_name} — ${initialMember.phone}`
+        : ""
+    );
     const [error, setError] = useState("");
     const [saving, setSaving] = useState(false);
 
@@ -23,18 +29,56 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
     }, [initialMember]);
 
     useEffect(() => {
-        if (!form.member_id || initialMembership) return;
-        // Memberships are loaded after selecting a member so the payment cannot be attached to another member's plan.
-        getMemberMemberships(form.member_id).then(setMemberships).catch(() => setError("Could not load this member's memberships."));
-    }, [form.member_id, initialMembership]);
-
-    function handleMemberChange(event) {
-        // Clear the old membership before loading choices for the newly selected member.
-        setForm({ ...form, member_id: event.target.value, membership_id: "" });
+    if (!form.member_id || initialMembership) {
+        if (!initialMembership) setMemberships([]);
+        return;
     }
+
+    let cancelled = false;
+
+    setMemberships([]);
+    // Memberships are loaded after selecting a member so the payment cannot be attached to another member's plan.
+    getMemberMemberships(form.member_id)
+        .then((data) => {
+            if (!cancelled) setMemberships(data);
+        })
+        .catch(() => {
+            if (!cancelled) {
+                setError("Could not load this member's memberships.");
+            }
+        });
+
+    return () => {
+        cancelled = true;
+    };
+}, [form.member_id, initialMembership]);
+
+
+    function handleMemberSearch(event) {
+    setMemberSearch(event.target.value);
+
+    setForm((prev) => ({
+        ...prev,
+        member_id: "",
+        membership_id: "",
+    }));
+
+    setMemberships([]);
+    setError("");
+    }
+
 
     async function handleSubmit(event) {
         event.preventDefault();
+        if (!form.member_id) {
+            setError("Please select a member from the search results.");
+            return;
+        }
+
+        if (!form.membership_id) {
+            setError("Please select a membership.");
+            return;
+        }
         setError("");
         setSaving(true);
         try {
@@ -57,14 +101,95 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
         </div>
         <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
             <div>
-                <label htmlFor="member" className={labelClass}>Member:</label>
-                <select required id="member" value={form.member_id} disabled={Boolean(initialMember)} onChange={handleMemberChange} className={fieldClass}>
-                    <option value="">Choose a member</option>{members.map((member) => <option key={member.member_id} value={member.member_id}>{member.first_name} {member.last_name} — {member.phone}</option>)}</select>
-                    </div>
-                    <div>
-                        <label htmlFor="membership" className={labelClass}>Membership:</label>
-                        <select required id="membership" value={form.membership_id} disabled={Boolean(initialMembership)} onChange={(event) => setForm({ ...form, membership_id: event.target.value })} className={fieldClass}><option value="">Choose a membership</option>{memberships.map((membership) => <option key={membership.membership_id} value={membership.membership_id}>Membership #{membership.membership_id} ({String(membership.start_date).slice(0, 10)} to {String(membership.expiration_date).slice(0, 10)})</option>)}</select>
-                        </div>
+            <label htmlFor="paymentMember" className={labelClass}>
+                Member:
+            </label>
+
+            <input
+                required
+                id="paymentMember"
+                type="text"
+                placeholder="Search by name or phone..."
+                value={memberSearch}
+                onChange={handleMemberSearch}
+                disabled={Boolean(initialMember)}
+                className={fieldClass}
+                autoComplete="off"
+            />
+
+            {memberSearch.trim() && !form.member_id && !initialMember && (
+                <div className="mt-1 max-h-48 overflow-y-auto rounded-md border border-[#8EB69B]/30 bg-[#0B2B26] dark:bg-white">
+                    {members
+                        .filter((member) =>
+                            `${member.first_name} ${member.last_name} ${member.phone}`
+                                .toLowerCase()
+                                .includes(memberSearch.trim().toLowerCase())
+                        )
+                        .map((member) => (
+                            <button
+                                key={member.member_id}
+                                type="button"
+                                onClick={() => {
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        member_id: String(member.member_id),
+                                        membership_id: "",
+                                    }));
+
+                                    setMemberSearch(
+                                        `${member.first_name} ${member.last_name} — ${member.phone}`
+                                    );
+                                }}
+                                className="block w-full px-3 py-3 text-left text-sm text-[#DAF1DE] dark:text-gray-900 hover:bg-[#235347] dark:hover:bg-gray-100"
+                            >
+                                <span className="font-semibold">
+                                    {member.first_name} {member.last_name}
+                                </span>
+                                <span className="ml-2 text-[#8EB69B] dark:text-gray-500">
+                                    {member.phone}
+                                </span>
+                            </button>
+                        ))}
+
+                    {!members.some((member) =>
+                        `${member.first_name} ${member.last_name} ${member.phone}`
+                            .toLowerCase()
+                            .includes(memberSearch.trim().toLowerCase())
+                    ) && (
+                        <p className="px-3 py-3 text-sm text-[#8EB69B]">
+                            No members found.
+                        </p>
+                    )}
+                </div>
+            )}
+            </div>
+
+
+            <div>
+            <label htmlFor="paymentMembership" className={labelClass}>
+                Membership:
+            </label>
+            <CustomSelect
+                id="paymentMembership"
+                value={form.membership_id}
+                disabled={!form.member_id || Boolean(initialMembership)}
+                onChange={(value) =>
+                    setForm({ ...form, membership_id: value })
+                }
+                className={fieldClass}
+                placeholder={
+                    !form.member_id
+                        ? "Select a member first"
+                        : memberships.length === 0
+                            ? "No memberships found"
+                            : "Select a membership"
+                }
+                options={memberships.map((membership) => ({
+                    value: membership.membership_id,
+                    label: `Membership #${membership.membership_id} — ${String(membership.start_date).slice(0, 10)} to ${String(membership.expiration_date).slice(0, 10)}`,
+                }))}
+            />
+            </div>
                         <div>
                             <label htmlFor="amount" className={labelClass}>Amount:</label>
                             <input required min="0.01" step="0.01" type="number" id="amount" value={form.amount} onChange={(event) => setForm({ ...form, amount: event.target.value })} className={fieldClass} />
@@ -73,8 +198,21 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
                                 <label htmlFor="paymentDate" className={labelClass}>Payment Date:</label><input required type="date" id="paymentDate" value={form.payment_date} onChange={(event) => setForm({ ...form, payment_date: event.target.value })} className={fieldClass} />
                                 </div>
                                 <div>
-                                    <label htmlFor="paymentMethod" className={labelClass}>Payment Method:</label><select id="paymentMethod" value={form.payment_method} onChange={(event) => setForm({ ...form, payment_method: event.target.value })} className={fieldClass}><option value="Cash">Cash</option>
-                                    <option value="Card">Card</option><option value="Bank Transfer">Bank Transfer</option></select>
+                                    <label htmlFor="paymentMethod" className={labelClass}>Payment Method:</label>
+                                    <CustomSelect
+                                        id="paymentMethod"
+                                        value={form.payment_method}
+                                        onChange={(value) =>
+                                            setForm({ ...form, payment_method: value })
+                                        }
+                                        className={fieldClass}
+                                        placeholder="Select payment method"
+                                        options={[
+                                            { value: "Cash", label: "Cash" },
+                                            { value: "Card", label: "Card" },
+                                            { value: "Bank Transfer", label: "Bank Transfer" },
+                                        ]}
+                                    />
                                     </div>{error && <p className="text-sm text-red-300">{error}</p>}<div className="flex justify-end border-t border-[#8EB69B]/25 pt-5"><Button buttonName={saving ? "Recording..." : "Record Payment"} buttonType="submit" buttonSign=""/></div></form></div></div>;
 }
 

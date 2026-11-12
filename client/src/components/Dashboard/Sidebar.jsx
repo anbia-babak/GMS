@@ -1,5 +1,6 @@
 import { NavLink } from "react-router";
 import ThemeToggle from "./ThemeToggle";
+import { useNavigate } from "react-router";
 
 const navItems = [
     {label: "Dashboard", path: "/dashboard"},
@@ -24,6 +25,26 @@ function NavigationIcon({ label }) {
 }
 
 function Sidebar(){
+
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+    try {
+        const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        });
+
+        if (response.ok) {
+        navigate("/login", { replace: true });
+        } else {
+        alert("Logout failed. Please try again.");
+        }
+    } catch (error) {
+        console.error("Logout error:", error);
+        alert("Unable to connect to the server.");
+    }
+    };
     return(
         <aside className="hidden sticky top-0 h-screen w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground md:flex">
             <div className="flex items-center gap-3 px-5 py-6">
@@ -48,12 +69,20 @@ function Sidebar(){
             </nav>
 
             <div className="border-t border-sidebar-border p-3 flex item-center justify-between gap-2">
-                <NavLink to="/logout" key="Logout" className="flex items-center gap-3
-                rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors
-                hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
-                    <svg viewBox="0 0 24 24" className="h-[18px] w-[18px] fill-none stroke-current" strokeWidth="1.8"><path d="M10 17l5-5-5-5M15 12H3M14 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /></svg>
+                <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    >
+                    <svg
+                        viewBox="0 0 24 24"
+                        className="h-[18px] w-[18px] fill-none stroke-current"
+                        strokeWidth="1.8"
+                    >
+                        <path d="M10 17l5-5-5-5M15 12H3" />
+                        <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" />
+                    </svg>
                     Logout
-                </NavLink>
+                </button>
                 <ThemeToggle />
             </div>
 

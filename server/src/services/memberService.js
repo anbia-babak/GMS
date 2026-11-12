@@ -2,8 +2,23 @@ import pool from "../db/pool.js";
 
 export async function getMembers() {
 
-    const result = await pool.query(
-        "SELECT * FROM members ORDER BY member_id");
+    const result = await pool.query(`
+    SELECT
+        m.*,
+        ms.membership_id,
+        ms.start_date AS membership_start_date,
+        ms.expiration_date AS membership_expiration_date,
+        ms.plan_id
+    FROM members m
+    LEFT JOIN LATERAL (
+        SELECT membership_id, start_date, expiration_date, plan_id
+        FROM memberships
+        WHERE member_id = m.member_id
+        ORDER BY start_date DESC, membership_id DESC
+        LIMIT 1
+    ) ms ON true
+    ORDER BY m.member_id
+    `);
     return result.rows;
 };
 
@@ -80,7 +95,7 @@ export async function deactivateSpecificMember(memberId) {
         `UPDATE members
         SET status = 'Deactive'
         WHERE member_id = $1
-        RETURNING * `,memberId
+        RETURNING * `,[memberId,]
     );
     return result.rows[0];
 }

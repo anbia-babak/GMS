@@ -1,16 +1,54 @@
 import pool from "../db/pool.js";
 
+
 export async function addMembership(membershipData) {
+    const { member_id, plan_id, start_date } = membershipData;
 
-    const {member_id, plan_id, start_date, expiration_date} = membershipData;
-    const result = await pool.query(
-        `INSERT INTO memberships (member_id, plan_id, start_date, expiration_date)
-        VALUES ($1, $2, $3, $4) RETURNING *`,
-        [member_id, plan_id, start_date, expiration_date]
+    // 1. Get the selected plan's duration
+    const planResult = await pool.query(
+        `SELECT duration_month
+         FROM membership_plans
+         WHERE plan_id = $1`,
+        [plan_id]
     );
-    return result.rows[0];
-};
 
+    if (planResult.rows.length === 0) {
+        throw new Error("Membership plan not found.");
+    }
+
+    const duration = planResult.rows[0].duration_month;
+
+    // 2. Calculate the expiration date
+    const [year, month, day] = start_date.split("-").map(Number);
+
+    const targetMonth = month - 1 + duration;
+    const targetYear = year + Math.floor(targetMonth / 12);
+    const finalMonth = targetMonth % 12;
+
+    // Handle months with fewer days (e.g. January 31)
+    const lastDay = new Date(
+        Date.UTC(targetYear, finalMonth + 1, 0)
+    ).getUTCDate();
+
+    const expirationDay = Math.min(day, lastDay);
+
+    const expirationDate = [
+        targetYear,
+        String(finalMonth + 1).padStart(2, "0"),
+        String(expirationDay).padStart(2, "0"),
+    ].join("-");
+
+    // 3. Save the membership
+    const result = await pool.query(
+        `INSERT INTO memberships
+         (member_id, plan_id, start_date, expiration_date)
+         VALUES ($1, $2, $3, $4)
+         RETURNING *`,
+        [member_id, plan_id, start_date, expirationDate]
+    );
+
+    return result.rows[0];
+}
 
 
 export async function getSpecificMemberCMemberships(member_id) {
@@ -318,5 +356,75 @@ export async function renewSpecificMembership(membershipId, newDate, planId) {
     return result.rows[0];
 };
 
+export async function getMembershipPlans() {
+  const result = await pool.query(`
+    SELECT plan_id, plan_name, duration_month, price
+    FROM membership_plans
+    ORDER BY duration_month ASC
+  `);
+
+  return result.rows;
+}
+
+export async function createMembershipPlan(planData) {
+    const { name, duration, price } = planData;
+
+    if (
+        !name?.trim() ||
+        !Number.isInteger(Number(duration)) ||
+        Number(duration) < 1 ||
+        !Number.isFinite(Number(price)) ||
+        Number(price) < 0
+    ) {
+        const error = new Error("Please provide valid membership plan details.");
+        error.status = 400;
+        throw error;
+    }
+
+    const result = await pool.query(
+        `INSERT INTO membership_plans
+         (plan_name, duration_month, price)
+         VALUES ($1, $2, $3)
+         RETURNING plan_id, plan_name, duration_month, price`,
+        [name.trim(), Number(duration), Number(price)]
+    );
+
+    return result.rows[0];
+}
+
+
+export async function updateMembershipPlan(planId, planData) {
+    const { name, duration, price } = planData;
+
+    if (
+        !name?.trim() ||
+        !Number.isInteger(Number(duration)) ||
+        Number(duration) < 1 ||
+        !Number.isFinite(Number(price)) ||
+        Number(price) < 0
+    ) {
+        const error = new Error("Please provide valid membership plan details.");
+        error.status = 400;
+        throw error;
+    }
+
+    const result = await pool.query(
+        `UPDATE membership_plans
+         SET plan_name = $1,
+             duration_month = $2,
+             price = $3
+         WHERE plan_id = $4
+         RETURNING plan_id, plan_name, duration_month, price`,
+        [name.trim(), Number(duration), Number(price), planId]
+    );
+
+    if (result.rows.length === 0) {
+        const error = new Error("Membership plan not found.");
+        error.status = 404;
+        throw error;
+    }
+
+    return result.rows[0];
+}
 
 

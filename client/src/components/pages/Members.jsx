@@ -20,6 +20,8 @@ function Members(){
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [refreshKey, setRefreshKey] = useState(0);
+
+    const [selectedTab, setSelectedTab] = useState("all");
     
     useEffect(()=>{
         async function loadMembers() {
@@ -76,12 +78,64 @@ function Members(){
 
     // Search locally because the members endpoint returns the full directory and has no search query contract.
     const filteredMembers = useMemo(() => {
-        const query = searchTerm.trim().toLowerCase();
-        if (!query) return members;
-        return members.filter((member) => [
-            member.member_id, member.first_name, member.last_name, member.phone, member.status,
-        ].some((value) => String(value || "").toLowerCase().includes(query)));
-    }, [members, searchTerm]);
+    const query = searchTerm.trim().toLowerCase();
+
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date().toLocaleDateString("en-CA");
+
+    // Calculate the date 7 days from today
+    const nextSevenDays = new Date();
+    nextSevenDays.setDate(nextSevenDays.getDate() + 7);
+
+    const sevenDaysLater = [
+        nextSevenDays.getFullYear(),
+        String(nextSevenDays.getMonth() + 1).padStart(2, "0"),
+        String(nextSevenDays.getDate()).padStart(2, "0"),
+    ].join("-");
+    
+    return members.filter((member) => {
+        // Search filter
+        const matchesSearch = [
+        member.member_id,
+        member.first_name,
+        member.last_name,
+        member.phone,
+        member.status,
+        ].some((value) =>
+        String(value || "").toLowerCase().includes(query)
+        );
+
+        if (!matchesSearch) return false;
+
+        // Membership date information
+        const startDate = member.membership_start_date;
+        const expirationDate = member.membership_expiration_date;
+
+        if (selectedTab === "all") return true;
+
+        // Members without a membership are excluded from these tabs
+        if (!startDate || !expirationDate) return false;
+
+        if (selectedTab === "active") {
+        return startDate <= today && expirationDate > sevenDaysLater;
+        }
+
+        if (selectedTab === "expired") {
+        return expirationDate < today;
+        }
+
+        if (selectedTab === "expiringSoon") {
+        return (
+            expirationDate >= today &&
+            expirationDate <= sevenDaysLater &&
+            startDate <= today
+        );
+        }
+
+    return true;
+    });
+    }, [members, searchTerm, selectedTab]);
+
 
     async function handleDeactivate() {
         if (!selectedMember) return;
@@ -198,10 +252,10 @@ function Members(){
 
                 
             <div className="mb-5 flex justify-between gap-4 sm:flex-row sm:items-end">
-                <MembersNavigation />
+                <MembersNavigation selectedTab={selectedTab} onTabChange={setSelectedTab}/>
                 <Searchbar value={searchTerm} onChange={updateSearch} placeHolder={"Search members"}/>
-
             </div>
+            
             <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-lg shadow-black/10">
                 <MembersNamesHeader />
                     

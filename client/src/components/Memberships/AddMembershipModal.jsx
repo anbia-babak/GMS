@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import Button from "../Dashboard/Button";
 import { getMembers } from "../../api/membersApi";
-import { addMembership } from "../../api/membershipsApi";
+import { addMembership, getMembershipPlans } from "../../api/membershipsApi";
+import CustomSelect from "../Dashboard/CustomSelect";
 import { getApiErrorMessage } from "../../api/apiClient";
 
 function AddMembershipModal({ member: initialMember, onClose, onMembershipAssigned }) {
@@ -13,14 +14,63 @@ function AddMembershipModal({ member: initialMember, onClose, onMembershipAssign
     text-[#DAF1DE] dark:text-gray-900`;
     const [members, setMembers] = useState(initialMember ? [initialMember] : []);
     const [memberId, setMemberId] = useState(initialMember?.member_id || "");
+    const [memberSearch, setMemberSearch] = useState(
+    initialMember
+        ? `${initialMember.first_name} ${initialMember.last_name} — ${initialMember.phone}`
+        : "");
+
     const [form, setForm] = useState({ plan_id: "", start_date: "", expiration_date: "" });
     const [error, setError] = useState("");
     const [saving, setSaving] = useState(false);
+    const [plans, setPlans] = useState([]);
 
+    // For loading members:
     useEffect(() => {
         if (initialMember) return;
         getMembers().then(setMembers).catch(() => setError("Could not load members for this membership."));
     }, [initialMember]);
+    // For loading membership plans:
+    useEffect(() => {
+        getMembershipPlans()
+        .then(setPlans)
+        .catch(() => {
+        setError("Could not load membership plans.");
+    });
+    }, []);
+
+    function handleMemberSearch(event) {
+    setMemberSearch(event.target.value);
+    setMemberId("");
+    }
+
+
+    const selectedPlan = plans.find(
+    (plan) => String(plan.plan_id) === String(form.plan_id)
+    );
+
+    // Calculating automatically the expiration date:
+    const calculatedExpirationDate = (() => {
+        if (!form.start_date || !selectedPlan) return "";
+
+        const [year, month, day] = form.start_date.split("-").map(Number);
+
+        const targetMonth = month - 1 + Number(selectedPlan.duration_month);
+        const targetYear = year + Math.floor(targetMonth / 12);
+        const finalMonth = targetMonth % 12;
+
+        const lastDay = new Date(
+            Date.UTC(targetYear, finalMonth + 1, 0)
+        ).getUTCDate();
+
+        const expirationDay = Math.min(day, lastDay);
+
+        return [
+            targetYear,
+            String(finalMonth + 1).padStart(2, "0"),
+            String(expirationDay).padStart(2, "0"),
+        ].join("-");
+    })();
+
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -28,7 +78,7 @@ function AddMembershipModal({ member: initialMember, onClose, onMembershipAssign
         setSaving(true);
         try {
             // The API requires an explicit expiration date, so the UI must not guess a plan duration.
-            const membership = await addMembership({ member_id: Number(memberId), plan_id: Number(form.plan_id), start_date: form.start_date, expiration_date: form.expiration_date });
+            const membership = await addMembership({ member_id: Number(memberId), plan_id: Number(form.plan_id), start_date: form.start_date});
             onMembershipAssigned(membership);
         } catch (requestError) {
             setError(getApiErrorMessage(requestError, "Could not assign the membership."));
@@ -48,10 +98,95 @@ function AddMembershipModal({ member: initialMember, onClose, onMembershipAssign
             <h2 className="text-xl font-semibold text-[#DAF1DE] dark:text-gray-900">Assign Membership</h2>
             <button type="button" onClick={onClose} aria-label="Close modal" className="flex h-9 w-9 items-center justify-center rounded-md text-[#8EB69B] dark:text-gray-600 transition-colors hover:bg-[#235347] dark:hover:bg-gray-100 hover:text-[#DAF1DE] dark:hover:text-gray-900">×</button></div>
             <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
-                <div><label htmlFor="membershipMember" className={labelClass}>Member:</label><select required className="!bg-[#163832]" id="membershipMember" value={memberId} onChange={(event) => setMemberId(event.target.value)} disabled={Boolean(initialMember)} ><option value="">Choose a member</option>{members.map((member) => <option key={member.member_id} value={member.member_id}>{member.first_name} {member.last_name}</option>)}</select></div>
-                <div><label htmlFor="membershipPlan" className={labelClass}>Membership Plan ID:</label><input required min="1" type="number" id="membershipPlan" value={form.plan_id} onChange={(event) => setForm({ ...form, plan_id: event.target.value })} className={fieldClass} /></div>
+                <div>
+                    <label htmlFor="membershipMember" className={labelClass}>
+                        Member:
+                    </label>
+
+                    <input
+                        required
+                        id="membershipMember"
+                        type="text"
+                        placeholder="Search by name or phone..."
+                        value={memberSearch}
+                        onChange={handleMemberSearch}
+                        disabled={Boolean(initialMember)}
+                        className={fieldClass}
+                        autoComplete="off"
+                    />
+
+                    {memberSearch.trim() && !memberId && !initialMember && (
+                        <div className="mt-1 max-h-48 overflow-y-auto rounded-md border border-[#8EB69B]/30 bg-[#0B2B26] dark:bg-white">
+
+                            {members
+                                .filter((member) =>
+                                    `${member.first_name} ${member.last_name} ${member.phone}`
+                                        .toLowerCase()
+                                        .includes(memberSearch.trim().toLowerCase())
+                                )
+                                .map((member) => (
+                                    <button
+                                        key={member.member_id}
+                                        type="button"
+                                        onClick={() => {
+                                            setMemberId(member.member_id);
+                                            setMemberSearch(
+                                                `${member.first_name} ${member.last_name} — ${member.phone}`
+                                            );
+                                        }}
+                                        className="block w-full px-3 py-3 text-left text-sm text-[#DAF1DE] dark:text-gray-900 transition hover:bg-[#235347] dark:hover:bg-gray-100"
+                                    >
+                                        <span className="font-semibold">
+                                            {member.first_name} {member.last_name}
+                                        </span>
+                                        <span className="ml-2 text-[#8EB69B] dark:text-gray-500">
+                                            {member.phone}
+                                        </span>
+                                    </button>
+                                ))}
+
+                            {members.filter((member) =>
+                                `${member.first_name} ${member.last_name} ${member.phone}`
+                                    .toLowerCase()
+                                    .includes(memberSearch.trim().toLowerCase())
+                            ).length === 0 && (
+                                <p className="px-3 py-3 text-sm text-[#8EB69B] dark:text-gray-500">
+                                    No members found.
+                                </p>
+                            )}
+                        </div>
+                    )}
+                </div>
+                <div><label htmlFor="membershipPlan" className={labelClass}>Membership Plan:</label>
+                <CustomSelect
+                    id="membershipPlan"
+                    value={form.plan_id}
+                    onChange={(value) =>
+                        setForm({ ...form, plan_id: value })
+                    }
+                    disabled={!memberId}
+                    className={fieldClass}
+                    placeholder="Select a membership plan"
+                    options={plans.map((plan) => ({
+                        value: plan.plan_id,
+                        label: plan.plan_name,
+                    }))}
+                />
+                </div>
                 <div><label htmlFor="startDate" className={labelClass}>Start Date:</label><input required type="date" id="startDate" value={form.start_date} onChange={(event) => setForm({ ...form, start_date: event.target.value })} className={fieldClass} /></div>
-                <div><label htmlFor="expirationDate" className={labelClass}>Expiration Date:</label><input required type="date" id="expirationDate" value={form.expiration_date} onChange={(event) => setForm({ ...form, expiration_date: event.target.value })} className={fieldClass} /></div>
+                <div>
+                    <label htmlFor="expirationDate" className={labelClass}>
+                        Expiration Date:
+                    </label>
+
+                    <input
+                        type="date"
+                        id="expirationDate"
+                        value={calculatedExpirationDate}
+                        readOnly
+                        className={`${fieldClass} cursor-not-allowed opacity-80`}
+                    />
+                </div>
                 {error && <p className="text-sm text-red-300">{error}</p>}
                 <div className="flex flex-col-reverse gap-3
                 border-t border-[#8EB69B]/25 pt-5 sm:flex-row

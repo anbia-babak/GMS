@@ -1,5 +1,5 @@
 // Login logic (front-end only). Replace loginRequest with your own backend call later.
-export const initialLoginForm = { email: "example@gmail.com", password: "123456", remember: false };
+export const initialLoginForm = { email: "", password: "", remember: false };
 
 export function validateLogin({ email, password }) {
   const errors = {};
@@ -11,6 +11,31 @@ export function validateLogin({ email, password }) {
 }
 
 // Placeholder: simulates a request. Connect your real backend here.
-export function loginRequest(form) {
-  return new Promise((resolve) => setTimeout(() => resolve({ ok: true, email: form.email }), 800));
+export async function loginRequest(form) {
+  try {
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        email: form.email,
+        password: form.password,
+        remember: form.remember,
+      }),
+    });
+
+    const data = await response.json();
+
+    return {
+      ok: response.ok,
+      ...data,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: "Unable to connect to the server.",
+    };
+  }
 }

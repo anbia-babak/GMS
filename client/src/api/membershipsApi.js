@@ -26,3 +26,26 @@ export async function renewMembership(membershipId, renewalData) {
     const result = await apiClient.post(`${API_URL}/${membershipId}/renew`, renewalData);
     return result.data;
 }
+
+export async function getMembershipPlans() {
+    const result = await apiClient.get(`${API_URL}/plans`);
+    return result.data;
+}
+
+export async function addMembershipPlan(planData) {
+    const result = await apiClient.post(
+        `${API_URL}/plans`,
+        planData
+    );
+
+    return result.data;
+}
+
+export async function updateMembershipPlan(planId, planData) {
+    const result = await apiClient.patch(
+        `${API_URL}/plans/${planId}`,
+        planData
+    );
+
+    return result.data;
+}

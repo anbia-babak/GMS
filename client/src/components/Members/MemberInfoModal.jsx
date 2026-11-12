@@ -1,3 +1,10 @@
+import avatar1 from "../../assets/user-avatars/user-avatar-1.JPG";
+import avatar2 from "../../assets/user-avatars/user-avatar-2.JPG";
+import avatar3 from "../../assets/user-avatars/user-avatar-3.JPG";
+import avatar4 from "../../assets/user-avatars/user-avatar-4.JPG";
+import avatar5 from "../../assets/user-avatars/user-avatar-5.JPG";
+import avatar6 from "../../assets/user-avatars/user-avatar-6.JPG";
+import avatar7 from "../../assets/user-avatars/user-avatar-7.JPG";
 import Button from "../Dashboard/Button";
 
 const infoLabels = [
@@ -13,6 +20,10 @@ const infoLabels = [
 
 function MemberInfoModal({member, onClose, onMemberEdited, onMemberDeactivated}) {
     
+    const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7];
+    const avatarNumber =  member?.avatar_number || 1;
+    const randomAvatar = avatars[avatarNumber - 1];
+
     return(
         <div className="fixed inset-0 z-50 flex items-center justify-center
          overflow-y-auto bg-[#051F20]/70 px-4 py-6 backdrop-blur-sm">
@@ -29,10 +40,10 @@ function MemberInfoModal({member, onClose, onMemberEdited, onMemberDeactivated})
                       hover:bg-[#235347] dark:hover:bg-gray-100 hover:text-[#DAF1DE] dark:hover:text-gray-900">×</button>
                 </div>
                 <div className="flex flex-col items-center gap-2 border-b
-                 border-inherit py-6 text-center">
-                    <p className="flex h-16 w-16 items-center justify-center text-[#DAF1DE] dark:text-gray-900
-                     rounded-full bg-secondary text-[10px] font-bold
-                      text-secondary-foreground">AVATAR</p>
+                 border-inherit py-4 text-center">
+                    <img src={randomAvatar} alt={`${member.first_name}'s avatar`}
+                        className="w-20 h-20 rounded-full object-cover"
+                    />
                     <p className="break-words text-lg font-semibold">{member.first_name} {member.last_name}</p>
                     <p className="text-xs opacity-70">Member #{member.member_id}</p>
                 </div>

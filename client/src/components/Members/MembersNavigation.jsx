@@ -1,30 +1,40 @@
-import Button from "../Dashboard/Button";
-import { NavLink } from "react-router";
 
 const navItems = [
-    {label: "All Members", path: "/allMembers"},
-    {label: "Active", path: "/activeMembers"},
-    {label: "Expired", path: "/expiredMembers"},
-    {label: "Expiring Soon", path: "/expiringSoonMembers"},
+  { label: "All Members", value: "all" },
+  { label: "Active", value: "active" },
+  { label: "Expired", value: "expired" },
+  { label: "Expiring Soon", value: "expiringSoon" },
 ];
 
-function MembersNavigation(){
+function MembersNavigation({ selectedTab, onTabChange }) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex w-full gap-1 overflow-x-auto rounded-xl border border-border bg-card p-1 sm:w-auto">
+        {navItems.map((item) => (
+          <button
+            key={item.value}
+            type="button"
+            onClick={() => onTabChange(item.value)}
+            className={`whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              selectedTab === item.value
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            }`}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
 
-    return(
-        <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex w-full gap-1 overflow-x-auto rounded-xl border border-border bg-card p-1 sm:w-auto">
-            {navItems.map((item) => (
-                <NavLink to={item.path} key={item.label}
-                className={`whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors ${item.label === "All Members" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"}`}>
-                    {item.label}
-                </NavLink>
-            ))}
-            </div>
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-primary" aria-label="Calendar">
-                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M8 3v4M16 3v4M3 10h18" /></svg>
-            </div>
-        </div>
-    );
-};
+      {/* Calendar icon */}
+      <div
+        className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-primary"
+        aria-label="Calendar"
+      >
+        {/* Keep your existing SVG here */}
+      </div>
+    </div>
+  );
+}
 
 export default MembersNavigation;

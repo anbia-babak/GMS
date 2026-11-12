@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { Pencil, Plus, X } from "lucide-react";
+import { getMembershipPlans, addMembershipPlan, updateMembershipPlan } from "../../api/membershipsApi";
 
 const field = "h-11 w-full rounded-md border border-[#8EB69B]/30 dark:border-gray-300 bg-[#0B2B26] dark:bg-white px-3.5 text-sm text-[#DAF1DE] dark:text-gray-900 outline-none focus:border-[#8EB69B] dark:focus:border-gray-400 focus:ring-2 focus:ring-[#8EB69B]/20";
 const label = "grid gap-2 text-xs font-bold text-[#8EB69B] dark:text-gray-700";
-const initialPlans = [
-  { id: 1, name: "3 Months", duration: "3", unit: "Months", price: "30" },
-  { id: 2, name: "6 Months", duration: "6", unit: "Months", price: "55" },
-  { id: 3, name: "1 Year", duration: "12", unit: "Months", price: "100" },
-];
+
 
 function PlanModal({ plan, onClose, onSave }) {
+
   const editing = Boolean(plan.id);
   const [form, setForm] = useState({ id: plan.id, name: plan.name || "", duration: plan.duration || "", unit: plan.unit || "Months", price: plan.price || "" });
   const update = (event) => setForm({ ...form, [event.target.name]: event.target.value });
@@ -40,10 +38,74 @@ function PlanModal({ plan, onClose, onSave }) {
   );
 }
 
+function formatPlan(plan) {
+    return {
+        id: plan.plan_id,
+        name: plan.plan_name,
+        duration: String(plan.duration_month),
+        unit: "Months",
+        price: String(plan.price),
+    };
+}
+
+
 export default function MembershipPlans() {
-  const [plans, setPlans] = useState(initialPlans);
+  const [plans, setPlans] = useState([]);
+  const[loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [modal, setModal] = useState(null);
-  const save = (plan) => { setPlans((items) => plan.id ? items.map((item) => item.id === plan.id ? plan : item) : [...items, { ...plan, id: Date.now() }]); setModal(null); };
+
+  useEffect(() => {
+    async function loadPlans() {
+        try {
+            setError("");
+            const data = await getMembershipPlans();
+            setPlans(data.map(formatPlan));
+        } catch (error) {
+            console.error("Membership plans loading error:", error);
+            setError(
+            error.response?.data?.message ||
+            error.message ||
+            "Could not load membership plans."
+    );
+} finally {
+            setLoading(false);
+        }
+    }
+
+    loadPlans();
+}, []);
+
+const save = async (plan) => {
+    try {
+        setError("");
+
+        const planData = {
+            name: plan.name,
+            duration: Number(plan.duration),
+            price: Number(plan.price),
+        };
+
+        if (plan.id) {
+            await updateMembershipPlan(plan.id, planData);
+        } else {
+            await addMembershipPlan(planData);
+        }
+
+        const updatedPlans = await getMembershipPlans();
+        setPlans(updatedPlans.map(formatPlan));
+
+        setModal(null);
+    } catch (error) {
+        setError(
+            error.response?.data?.message ||
+            "Could not save membership plan."
+        );
+    }
+};
+
+
+
   const th = "border-b border-[#8EB69B]/20 dark:border-gray-300 bg-[#0B2B26] dark:bg-white px-5 py-3.5 text-left text-xs font-extrabold uppercase text-[#8EB69B] dark:text-gray-900";
   const td = "border-b border-[#8EB69B]/15 px-5 py-4 text-sm text-[#8EB69B] dark:text-gray-700";
   return (
@@ -56,6 +118,15 @@ export default function MembershipPlans() {
         <button type="button" onClick={() => setModal({})} className="inline-flex min-h-11 items-center gap-2 rounded-md bg-[#8EB69B] dark:bg-gray-200 px-4 text-sm font-extrabold text-[#051F20] dark:text-gray-900 hover:bg-[#DAF1DE] dark:hover:bg-gray-300 transition-colors"><Plus size={17} />
         Add Plan</button>
       </header>
+
+      {loading && (
+          <p className="py-4 text-sm">Loading membership plans...</p>
+      )}
+
+      {error && (
+          <p className="mb-4 text-sm text-red-400">{error}</p>
+      )}
+
       <div className="overflow-x-auto rounded-md border border-[#8EB69B]/20 dark:border-gray-200">
         <table className="w-full min-w-[620px] border-collapse">
           <thead>
