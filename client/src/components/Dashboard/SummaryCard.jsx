@@ -1,14 +1,4 @@
-import { UserRoundGroup } from "lucide-react";
-import { UserCheck } from "lucide-react";
-import { UserX } from "lucide-react";
-import { Wallet } from "lucide-react";
-
-const icons = [
-    {"icon": UserRoundGroup },
-    {"icon": UserCheck },
-    {"icon": UserX },
-    {"icon": Wallet }
-]
+import { useLocale } from "../../i18n/useLocale";
 function SummaryIcon({icon: IconComponent}) {
     
     return (
@@ -19,12 +9,13 @@ function SummaryIcon({icon: IconComponent}) {
 }
 
 function SummaryCard({label, value, icon}) {
+    const { formatNumber } = useLocale();
 
     return(
         <div className="flex items-center justify-between rounded-2xl border border-border bg-card p-5 shadow-lg shadow-black/10">
             <div>
                 <p className="text-sm text-muted-foreground">{label}</p>
-                <p className="mt-1 text-2xl font-bold text-card-foreground">{value}</p>
+                <p className="mt-1 text-2xl font-bold text-card-foreground">{typeof value === "number" ? formatNumber(value) : value}</p>
             </div>
 
                 <SummaryIcon icon={icon} />

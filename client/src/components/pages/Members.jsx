@@ -1,3 +1,4 @@
+import { useLocale } from "../../i18n/useLocale";
 import Searchbar from "../Members/Searchbar";
 import MembersNavigation from "../Members/MembersNavigation";
 import MembersNamesHeader from "../Members/MembersNamesHeader";
@@ -10,11 +11,13 @@ import AddPaymentModal from "../Payments/AddPaymentModal";
 import MemberInfoModal from "../Members/MemberInfoModal";
 import EditMemberModal from "../Members/EditMemberModal";
 import DeactivateConfirmationModal from "../Members/DeactivateConfirmationModal";
+import Pagination from "../common/Pagination";
 import { deactivateMember, getMembers } from "../../api/membersApi.js";
 import { getApiErrorMessage } from "../../api/apiClient";
 import { UserPlus } from "lucide-react";
 
 function Members(){
+    const { t, translateError } = useLocale();
 
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,9 +25,12 @@ function Members(){
     const [refreshKey, setRefreshKey] = useState(0);
 
     const [selectedTab, setSelectedTab] = useState("all");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
     
     useEffect(()=>{
         async function loadMembers() {
+            setCurrentPage(1);
             try{
                 setLoading(true);
                 setError("");
@@ -74,10 +80,13 @@ function Members(){
 
     const updateSearch = (event) => {
     setSearchTerm(event.target.value);
+    setCurrentPage(1);
     };
+
 
     // Search locally because the members endpoint returns the full directory and has no search query contract.
     const filteredMembers = useMemo(() => {
+
     const query = searchTerm.trim().toLowerCase();
 
     // Get today's date in YYYY-MM-DD format
@@ -135,7 +144,9 @@ function Members(){
     return true;
     });
     }, [members, searchTerm, selectedTab]);
-
+    const pageCount = Math.max(1, Math.ceil(filteredMembers.length / pageSize));
+    const effectivePage = Math.min(currentPage, pageCount);
+    const visibleMembers = filteredMembers.slice((effectivePage - 1) * pageSize, effectivePage * pageSize);
 
     async function handleDeactivate() {
         if (!selectedMember) return;
@@ -159,11 +170,11 @@ function Members(){
             <div className="mx-auto max-w-7xl">
                 <header className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
-                        <p className="mb-1 text-sm font-medium text-primary">Member directory</p>
-                        <h1 className="!text-4xl font-extrabold tracking-tight text-foreground">Members</h1>
-                        <p className="mt-1 text-sm text-muted-foreground">View and manage your gym members.</p>
+                        <p className="mb-1 text-sm font-medium text-primary">{t("Member directory")}</p>
+                        <h1 className="!text-4xl font-extrabold tracking-tight text-foreground">{t("Members")}</h1>
+                        <p className="mt-1 text-sm text-muted-foreground">{t("View and manage your gym members.")}</p>
                     </div>
-                    <Button buttonName="New Member" icon={UserPlus} callback={handleAddShowMemberClick}/>
+                    <Button buttonName={t("New Member")} icon={UserPlus} callback={handleAddShowMemberClick}/>
 
                 </header>
                 {/* Showing The Add Members Modal:*/}
@@ -193,6 +204,7 @@ function Members(){
                         onMembershipAssigned={(membership) => {
                             setShowAssignMembership(false);
                             setSelectedMember((currentMember) => ({ ...currentMember, membership }));
+                            setRefreshKey((key) => key + 1);
                             setShowAddPayment(true);
                         }}
                         /> 
@@ -251,33 +263,33 @@ function Members(){
                 )}   
 
                 
-            <div className="mb-5 flex justify-between gap-4 sm:flex-row sm:items-end">
-                <MembersNavigation selectedTab={selectedTab} onTabChange={setSelectedTab}/>
-                <Searchbar value={searchTerm} onChange={updateSearch} placeHolder={"Search members"}/>
+            <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
+                <MembersNavigation selectedTab={selectedTab} onTabChange={(tab) => { setSelectedTab(tab); setCurrentPage(1); }}/>
+                <Searchbar value={searchTerm} onChange={updateSearch} placeHolder={t("Search members")}/>
             </div>
             
             <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-lg shadow-black/10">
-                <MembersNamesHeader />
-                    
+                <div className="space-y-3 p-3 sm:p-4">
+                        <MembersNamesHeader />
                         {loading ?(
-                            <p className="p-6 text-center text-muted-foreground">Loading members...</p>
+                            <p className="min-w-[850px] p-6 text-center text-muted-foreground">{t("Loading members...")}</p>
                         ) : error ? (
-                            <div className="p-6 text-center">
-                                <p className="mb-3 text-red-500">{error}</p>
+                            <div className="min-w-[850px] p-6 text-center">
+                                <p className="mb-3 text-red-500">{translateError(error)}</p>
                                 <button onClick={()=> setRefreshKey((key) => key + 1)}
                                     className="rounded-lg bg-primary px-4 py-2 text-white"
-                                    >Try Again</button>
+                                    >{t("Try Again")}</button>
                             </div>
                         ) : filteredMembers.length === 0 ? (
-                            <p className="p-6 text-center text-muted-foreground">No members found.</p>
+                            <p className="min-w-[850px] p-6 text-center text-muted-foreground">{t("No members found.")}</p>
                         ) : (
-                            filteredMembers.map((card)=>(
-                                <div key={card.member_id}>
-                                    <MemberInfoCard member={card} onView={handleViewMemberInfoClick} {...card}/>
-                                </div>
+                            visibleMembers.map((card)=>(
+                                <MemberInfoCard key={card.member_id} member={card} onView={handleViewMemberInfoClick} {...card}/>
                             ))
-                        )}                
+                        )}
+                </div>
             </div>
+            {!loading && !error && <Pagination total={filteredMembers.length} currentPage={currentPage} pageSize={pageSize} onPageChange={setCurrentPage} onPageSizeChange={(size) => { setPageSize(size); setCurrentPage(1); }} />}
             </div>
         </section>
     );

@@ -1,3 +1,4 @@
+import { useLocale } from "../../i18n/useLocale";
 import { useEffect, useState } from "react";
 import Button from "../Dashboard/Button";
 import CustomSelect from "../Dashboard/CustomSelect";
@@ -7,6 +8,7 @@ import { addPayment } from "../../api/paymentsApi";
 import { getApiErrorMessage } from "../../api/apiClient";
 
 function AddPaymentModal({ member: initialMember, membership: initialMembership, onClose, onPaymentAdded }) {
+    const { t, formatDate, formatNumber, translateError } = useLocale();
      const fieldClass = `h-11 w-full rounded-md border
     border-[#8EB69B]/40 dark:border-gray-300 bg-[#0B2B26] dark:bg-white px-3 text-sm text-[#DAF1DE] dark:text-gray-900
     outline-none transition focus:border-[#8EB69B] dark:focus:border-gray-400 focus:ring-2
@@ -29,14 +31,10 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
     }, [initialMember]);
 
     useEffect(() => {
-    if (!form.member_id || initialMembership) {
-        if (!initialMembership) setMemberships([]);
-        return;
-    }
+    if (!form.member_id || initialMembership) return;
 
     let cancelled = false;
 
-    setMemberships([]);
     // Memberships are loaded after selecting a member so the payment cannot be attached to another member's plan.
     getMemberMemberships(form.member_id)
         .then((data) => {
@@ -95,21 +93,19 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
     return <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#051F20]/70 px-4 py-6 backdrop-blur-sm">
         <div className="max-h-[calc(100vh-3rem)] w-full max-w-lg overflow-y-auto rounded-lg border border-[#8EB69B]/25 bg-[#163832] dark:bg-white p-6 shadow-2xl sm:p-7">
         <div className="flex items-center justify-between border-b border-[#8EB69B]/25 pb-4">
-        <h2 className="text-xl font-semibold text-[#DAF1DE] dark:text-gray-900">Record Payment</h2>
-        <button type="button" onClick={onClose} aria-label="Close modal"
+        <h2 className="text-xl font-semibold text-[#DAF1DE] dark:text-gray-900">{t("Record Payment")}</h2>
+        <button type="button" onClick={onClose} aria-label={t("Close modal")}
         className="flex h-9 w-9 items-center justify-center rounded-md text-[#8EB69B] dark:text-gray-600 transition-colors hover:bg-[#235347] dark:hover:bg-gray-100 hover:text-[#DAF1DE] dark:hover:text-gray-900">×</button>
         </div>
         <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
             <div>
-            <label htmlFor="paymentMember" className={labelClass}>
-                Member:
-            </label>
+            <label htmlFor="paymentMember" className={labelClass}>{t("Member")}</label>
 
             <input
                 required
                 id="paymentMember"
                 type="text"
-                placeholder="Search by name or phone..."
+                placeholder={t("Search by name or phone...")}
                 value={memberSearch}
                 onChange={handleMemberSearch}
                 disabled={Boolean(initialMember)}
@@ -140,12 +136,12 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
                                         `${member.first_name} ${member.last_name} — ${member.phone}`
                                     );
                                 }}
-                                className="block w-full px-3 py-3 text-left text-sm text-[#DAF1DE] dark:text-gray-900 hover:bg-[#235347] dark:hover:bg-gray-100"
+                                className="block w-full px-3 py-3 text-start text-sm text-[#DAF1DE] dark:text-gray-900 hover:bg-[#235347] dark:hover:bg-gray-100"
                             >
                                 <span className="font-semibold">
                                     {member.first_name} {member.last_name}
                                 </span>
-                                <span className="ml-2 text-[#8EB69B] dark:text-gray-500">
+                                <span className="ms-2 text-[#8EB69B] dark:text-gray-500">
                                     {member.phone}
                                 </span>
                             </button>
@@ -156,9 +152,7 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
                             .toLowerCase()
                             .includes(memberSearch.trim().toLowerCase())
                     ) && (
-                        <p className="px-3 py-3 text-sm text-[#8EB69B]">
-                            No members found.
-                        </p>
+                        <p className="px-3 py-3 text-sm text-[#8EB69B]">{t("No members found.")}</p>
                     )}
                 </div>
             )}
@@ -166,9 +160,7 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
 
 
             <div>
-            <label htmlFor="paymentMembership" className={labelClass}>
-                Membership:
-            </label>
+            <label htmlFor="paymentMembership" className={labelClass}>{t("Membership")}</label>
             <CustomSelect
                 id="paymentMembership"
                 value={form.membership_id}
@@ -179,26 +171,26 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
                 className={fieldClass}
                 placeholder={
                     !form.member_id
-                        ? "Select a member first"
+                        ? t("Select a member first")
                         : memberships.length === 0
-                            ? "No memberships found"
-                            : "Select a membership"
+                            ? t("No memberships found")
+                            : t("Select a membership")
                 }
                 options={memberships.map((membership) => ({
                     value: membership.membership_id,
-                    label: `Membership #${membership.membership_id} — ${String(membership.start_date).slice(0, 10)} to ${String(membership.expiration_date).slice(0, 10)}`,
+                    label: `${t("Membership #{{id}}", { id: formatNumber(membership.membership_id, { useGrouping: false }) })} — ${t("{{start}} to {{end}}", { start: formatDate(membership.start_date), end: formatDate(membership.expiration_date) })}`,
                 }))}
             />
             </div>
                         <div>
-                            <label htmlFor="amount" className={labelClass}>Amount:</label>
+                            <label htmlFor="amount" className={labelClass}>{t("Amount")}</label>
                             <input required min="0.01" step="0.01" type="number" id="amount" value={form.amount} onChange={(event) => setForm({ ...form, amount: event.target.value })} className={fieldClass} />
                             </div>
                             <div>
-                                <label htmlFor="paymentDate" className={labelClass}>Payment Date:</label><input required type="date" id="paymentDate" value={form.payment_date} onChange={(event) => setForm({ ...form, payment_date: event.target.value })} className={fieldClass} />
+                                <label htmlFor="paymentDate" className={labelClass}>{t("Payment Date")}</label><input required type="date" id="paymentDate" value={form.payment_date} onChange={(event) => setForm({ ...form, payment_date: event.target.value })} className={fieldClass} />
                                 </div>
                                 <div>
-                                    <label htmlFor="paymentMethod" className={labelClass}>Payment Method:</label>
+                                    <label htmlFor="paymentMethod" className={labelClass}>{t("Payment Method")}</label>
                                     <CustomSelect
                                         id="paymentMethod"
                                         value={form.payment_method}
@@ -206,14 +198,14 @@ function AddPaymentModal({ member: initialMember, membership: initialMembership,
                                             setForm({ ...form, payment_method: value })
                                         }
                                         className={fieldClass}
-                                        placeholder="Select payment method"
+                                        placeholder={t("Select payment method")}
                                         options={[
-                                            { value: "Cash", label: "Cash" },
-                                            { value: "Card", label: "Card" },
-                                            { value: "Bank Transfer", label: "Bank Transfer" },
+                                            { value: "Cash", label: t("Cash") },
+                                            { value: "Card", label: t("Card") },
+                                            { value: "Bank Transfer", label: t("Bank Transfer") },
                                         ]}
                                     />
-                                    </div>{error && <p className="text-sm text-red-300">{error}</p>}<div className="flex justify-end border-t border-[#8EB69B]/25 pt-5"><Button buttonName={saving ? "Recording..." : "Record Payment"} buttonType="submit" buttonSign=""/></div></form></div></div>;
+                                    </div>{error && <p className="text-sm text-red-300">{translateError(error)}</p>}<div className="flex justify-end border-t border-[#8EB69B]/25 pt-5"><Button buttonName={saving ? t("Recording...") : t("Record Payment")} buttonType="submit" buttonSign=""/></div></form></div></div>;
 }
 
 export default AddPaymentModal;

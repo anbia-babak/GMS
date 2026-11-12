@@ -8,6 +8,7 @@ import Reports from "./components/pages/Reports";
 import Settings from "./components/pages/Settings";
 import Login from "./components/pages/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import RouteError from "./components/pages/RouteError";
 
 function App() {
 //   const router = createBrowserRouter([
@@ -56,9 +57,11 @@ function App() {
   {
     path: "/login",
     element: <Login />,
+    errorElement: <RouteError />,
   },
   {
     path: "/",
+    errorElement: <RouteError />,
     element: (
       <ProtectedRoute>
         <MainLayout />
@@ -74,6 +77,7 @@ function App() {
       { path: "/settings", element: <Settings /> },
     ],
   },
+  { path: "*", element: <RouteError notFound /> },
 ]);
 
   return <RouterProvider router={router}/>;

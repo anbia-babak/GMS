@@ -171,7 +171,10 @@ export async function getAllMemberships(search, status, plan_id) {
             ms.member_id,
             m.member_id,
             CONCAT(m.first_name, ' ', m.last_name) AS member_name,
+            ms.plan_id,
             mp.plan_name,
+            mp.duration_month,
+            mp.price,
             ms.start_date,
             ms.expiration_date,
 

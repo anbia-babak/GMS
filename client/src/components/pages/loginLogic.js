@@ -1,4 +1,3 @@
-// Login logic (front-end only). Replace loginRequest with your own backend call later.
 export const initialLoginForm = { email: "", password: "", remember: false };
 
 export function validateLogin({ email, password }) {
@@ -10,7 +9,6 @@ export function validateLogin({ email, password }) {
   return errors;
 }
 
-// Placeholder: simulates a request. Connect your real backend here.
 export async function loginRequest(form) {
   try {
     const response = await fetch("/api/auth/login", {
@@ -32,7 +30,7 @@ export async function loginRequest(form) {
       ok: response.ok,
       ...data,
     };
-  } catch (error) {
+  } catch {
     return {
       ok: false,
       message: "Unable to connect to the server.",

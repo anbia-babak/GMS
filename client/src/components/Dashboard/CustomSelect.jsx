@@ -1,4 +1,4 @@
-
+import { useLocale } from "../../i18n/useLocale";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
@@ -7,10 +7,11 @@ function CustomSelect({
     value,
     onChange,
     options,
-    placeholder = "Select an option",
+    placeholder,
     disabled = false,
     className = "",
 }) {
+    const { t } = useLocale();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -41,10 +42,10 @@ function CustomSelect({
                 aria-haspopup="listbox"
                 aria-expanded={isOpen}
                 onClick={() => setIsOpen((previous) => !previous)}
-                className={`${className} flex items-center justify-between text-left disabled:cursor-not-allowed disabled:opacity-50`}
+                className={`${className} flex items-center justify-between text-start disabled:cursor-not-allowed disabled:opacity-50`}
             >
                 <span className={!selectedOption ? "opacity-60" : ""}>
-                    {selectedOption?.label || placeholder}
+                    {selectedOption?.label || placeholder || t("Select an option")}
                 </span>
 
                 <ChevronDown
@@ -58,7 +59,7 @@ function CustomSelect({
             {isOpen && !disabled && (
                 <div
                     role="listbox"
-                    className="absolute left-0 top-full z-[100] mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-[#8EB69B]/40 bg-[#0B2B26] py-1 shadow-xl dark:border-gray-300 dark:bg-white"
+                    className="absolute start-0 top-full z-[100] mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-[#8EB69B]/40 bg-[#0B2B26] py-1 shadow-xl dark:border-gray-300 dark:bg-white"
                 >
                     {options.map((option) => (
                         <button
@@ -70,7 +71,7 @@ function CustomSelect({
                                 onChange(option.value);
                                 setIsOpen(false);
                             }}
-                            className={`w-full px-3 py-2 text-left text-sm transition
+                            className={`w-full px-3 py-2 text-start text-sm transition
                                 ${
                                     String(option.value) === String(value)
                                         ? "bg-[#235347] text-[#DAF1DE] dark:bg-gray-200 dark:text-gray-900"

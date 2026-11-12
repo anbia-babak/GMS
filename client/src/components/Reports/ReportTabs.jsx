@@ -1,5 +1,6 @@
-
+import { useLocale } from "../../i18n/useLocale";
 function ReportTabs({ activeTab, setActiveTab }) {
+  const { t } = useLocale();
   const tabs = ["Members", "Memberships", "Income"];
   return (
     <div className="no-print flex overflow-x-auto border-b
@@ -9,7 +10,7 @@ function ReportTabs({ activeTab, setActiveTab }) {
         className={`min-h-16 shrink-0 border-0 border-b-[3px]
         px-5 text-sm font-bold transition-colors
         ${activeTab === tab ? "border-[#163832] dark:border-gray-900 bg-[#DAF1DE]/40 dark:bg-gray-100 text-[#163832] dark:text-gray-900" : "border-transparent bg-transparent text-[#61756A] dark:text-gray-600 hover:bg-[#F4F8F5] dark:hover:bg-gray-100 hover:text-[#163832] dark:hover:text-gray-900"}`}>
-          {tab}
+          {t(tab)}
         </button>
       ))}
     </div>

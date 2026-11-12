@@ -1,3 +1,4 @@
+import { useLocale } from "../../i18n/useLocale";
 import { useState , useEffect} from "react";
 import Button from "../Dashboard/Button";
 import { renewMembership, getMembershipPlans } from "../../api/membershipsApi";
@@ -5,6 +6,7 @@ import CustomSelect from "../Dashboard/CustomSelect";
 import { getApiErrorMessage } from "../../api/apiClient";
 
 function RenewMembershipModal({ membership, onClose, onRenewedMembership }) {
+    const { t, translateError } = useLocale();
     const fieldClass = `h-11 w-full rounded-md border
     border-[#8EB69B]/40 dark:border-gray-300 bg-[#0B2B26] dark:bg-white px-3 text-sm text-[#DAF1DE] dark:text-gray-900
     outline-none transition focus:border-[#8EB69B] dark:focus:border-gray-400 focus:ring-2
@@ -47,8 +49,8 @@ function RenewMembershipModal({ membership, onClose, onRenewedMembership }) {
     useEffect(() =>{
         getMembershipPlans()
             .then(setPlans)
-            .catch(() => setError("Could not load membership plans."))
-    });
+            .catch(() => setError("Could not load membership plans."));
+    }, []);
 
     const selectedPlan = plans.find(
     (plan) => String(plan.plan_id) === String(form.planId)
@@ -100,9 +102,9 @@ function RenewMembershipModal({ membership, onClose, onRenewedMembership }) {
         bg-[#163832] dark:bg-white p-6 shadow-2xl sm:p-7">
             <div className="flex items-center justify-between
             border-b border-[#8EB69B]/25 pb-4">
-                <h2 className="text-xl font-semibold text-[#DAF1DE] dark:text-gray-900">Renew Membership</h2>
+                <h2 className="text-xl font-semibold text-[#DAF1DE] dark:text-gray-900">{t("Renew Membership")}</h2>
                 <button type="button" onClick={onClose}
-                aria-label="Close modal" className="flex h-9 w-9
+                aria-label={t("Close modal")} className="flex h-9 w-9
                 items-center justify-center rounded-md text-[#8EB69B] dark:text-gray-600 
                 transition-colors hover:bg-[#235347] dark:hover:bg-gray-100
                 hover:text-[#DAF1DE] dark:hover:text-gray-900">×</button>
@@ -111,11 +113,9 @@ function RenewMembershipModal({ membership, onClose, onRenewedMembership }) {
                 onSubmit={handleSubmit}>
                     <p className="rounded-md border border-[#8EB69B]/30
                     bg-[#0B2B26] dark:bg-gray-100 px-3 py-3 text-sm font-medium
-                    text-[#DAF1DE] dark:text-gray-900">Member: {membership.member_name}</p>   
+                    text-[#DAF1DE] dark:text-gray-900">{t("Member")}: <bdi>{membership.member_name}</bdi></p>
                 <div>
-                    <label htmlFor="renewalPlan" className={labelClass}>
-                        Membership Plan:
-                    </label>
+                    <label htmlFor="renewalPlan" className={labelClass}>{t("Membership Plan")}</label>
 
                     <CustomSelect
                         id="renewalPlan"
@@ -124,18 +124,16 @@ function RenewMembershipModal({ membership, onClose, onRenewedMembership }) {
                             setForm({ ...form, planId: value })
                         }
                         className={fieldClass}
-                        placeholder="Select a membership plan"
+                        placeholder={t("Select a membership plan")}
                         options={plans.map((plan) => ({
                             value: plan.plan_id,
                             label: plan.plan_name,
                         }))}
                     />
                     </div>
-                    <div><label htmlFor="startDate" className={labelClass}>Start Date:</label><input required type="date" id="startDate" value={form.newDate} onChange={(event) => setForm({ ...form, newDate: event.target.value })} className={fieldClass} /></div>
+                    <div><label htmlFor="startDate" className={labelClass}>{t("Start Date")}</label><input required type="date" id="startDate" value={form.newDate} onChange={(event) => setForm({ ...form, newDate: event.target.value })} className={fieldClass} /></div>
                     <div>
-                    <label htmlFor="renewalExpiration" className={labelClass}>
-                        Expiration Date:
-                    </label>
+                    <label htmlFor="renewalExpiration" className={labelClass}>{t("Expiration Date")}</label>
 
                     <input
                         type="date"
@@ -146,7 +144,7 @@ function RenewMembershipModal({ membership, onClose, onRenewedMembership }) {
                     />
                     </div>
 
-                    {error && <p className="text-sm text-red-300">{error}</p>}<div className="flex flex-col-reverse gap-3 border-t border-[#8EB69B]/25 pt-5 sm:flex-row sm:justify-end"><Button buttonName="Cancel" buttonType="button" buttonSign="" callback={onClose}/><Button buttonName={saving ? "Renewing..." : "Renew"} buttonType="submit" buttonSign=""/></div></form></div></div>;
+                    {error && <p className="text-sm text-red-300">{translateError(error)}</p>}<div className="flex flex-col-reverse gap-3 border-t border-[#8EB69B]/25 pt-5 sm:flex-row sm:justify-end"><Button buttonName={t("Cancel")} buttonType="button" buttonSign="" callback={onClose}/><Button buttonName={saving ? t("Renewing...") : t("Renew")} buttonType="submit" buttonSign=""/></div></form></div></div>;
 }
 
 export default RenewMembershipModal;

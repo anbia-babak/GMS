@@ -3,9 +3,9 @@ import Sidebar from "../Dashboard/Sidebar";
 
 function MainLayout(){
     return(
-        <div className="flex">
+        <div className="flex min-h-screen flex-col md:flex-row">
             <Sidebar />
-            <main className="flex-1">
+            <main className="min-w-0 flex-1">
                 <Outlet />
             </main>
         </div>

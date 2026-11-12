@@ -1,7 +1,9 @@
+import { useLocale } from "../../i18n/useLocale";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 
 export default function ProtectedRoute({ children }) {
+  const { t } = useLocale();
   const [status, setStatus] = useState("checking");
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export default function ProtectedRoute({ children }) {
   }, []);
 
   if (status === "checking") {
-    return <div>Checking authentication...</div>;
+    return <div>{t("Checking authentication...")}</div>;
   }
 
   if (status === "unauthenticated") {

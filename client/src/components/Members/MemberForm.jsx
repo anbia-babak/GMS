@@ -1,3 +1,4 @@
+import { useLocale } from "../../i18n/useLocale";
 import { useState } from "react";
 import Button from "../Dashboard/Button";
 import { addMember, editSpecificMember } from "../../api/membersApi";
@@ -8,6 +9,7 @@ function toDateInputValue(value) {
 }
 
 function MemberForm({ member, onClose, onMemberSaved }) {
+    const { t, translateError } = useLocale();
     // One form supports add and edit so both flows send the same backend field names.
     const [form, setForm] = useState({
         first_name: member?.first_name || "",
@@ -48,56 +50,52 @@ function MemberForm({ member, onClose, onMemberSaved }) {
         }}>
         {/* Necessary: each label and control are grouped so the two-column layout stays aligned. */}
         <div>
-            <label htmlFor="fname" className={labelClass}>First Name:</label>
+            <label htmlFor="fname" className={labelClass}>{t("First Name")}</label>
             <input required type="text" id="fname" value={form.first_name} onChange={(event) => setForm({ ...form, first_name: event.target.value })} className={fieldClass} />
         </div>
 
         <div>
-            <label htmlFor="lname" className={labelClass}>Last Name:</label>
+            <label htmlFor="lname" className={labelClass}>{t("Last Name")}</label>
             <input required type="text" id="lname" value={form.last_name} onChange={(event) => setForm({ ...form, last_name: event.target.value })} className={fieldClass} />
         </div>
 
         <div>
-            <label htmlFor="phone" className={labelClass}>Phone:</label>
+            <label htmlFor="phone" className={labelClass}>{t("Phone")}</label>
             <input required type="tel" id="phone" value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} className={fieldClass} />
         </div>
 
         <fieldset>
-            <legend className={labelClass}>Gender:</legend>
+            <legend className={labelClass}>{t("Gender")}</legend>
             {/* Necessary: both radio controls share one name so only one gender can be selected. */}
             <div className="flex h-11 items-center gap-6 rounded-md border
              border-[#235347] dark:border-gray-300 bg-[#0B2B26] dark:bg-white px-3 text-sm text-[#DAF1DE] dark:text-gray-900">
                 <label htmlFor="male" className="flex items-center gap-2">
-                    <input required type="radio" name="gender" id="male" value="male" checked={form.gender === "male"} onChange={(event) => setForm({ ...form, gender: event.target.value })} className="h-4 w-4 accent-[#8EB69B] dark:accent-gray-700" />
-                    Male
-                </label>
+                    <input required type="radio" name="gender" id="male" value="male" checked={form.gender === "male"} onChange={(event) => setForm({ ...form, gender: event.target.value })} className="h-4 w-4 accent-[#8EB69B] dark:accent-gray-700" />{t("Male")}</label>
                 <label htmlFor="female" className="flex items-center gap-2">
-                    <input required type="radio" name="gender" id="female" value="female" checked={form.gender === "female"} onChange={(event) => setForm({ ...form, gender: event.target.value })} className="h-4 w-4 accent-[#8EB69B] dark:accent-gray-700" />
-                    Female
-                </label>
+                    <input required type="radio" name="gender" id="female" value="female" checked={form.gender === "female"} onChange={(event) => setForm({ ...form, gender: event.target.value })} className="h-4 w-4 accent-[#8EB69B] dark:accent-gray-700" />{t("Female")}</label>
             </div>
         </fieldset>
 
         <div>
-            <label htmlFor="dateOfBirth" className={labelClass}>Date of Birth:</label>
+            <label htmlFor="dateOfBirth" className={labelClass}>{t("Date of Birth")}</label>
             <input required type="date" id="dateOfBirth" value={form.date_of_birth} onChange={(event) => setForm({ ...form, date_of_birth: event.target.value })} className={fieldClass} />
         </div>
 
         <div>
-            <label htmlFor="address" className={labelClass}>Address</label>
+            <label htmlFor="address" className={labelClass}>{t("Address")}</label>
             <input required type="text" id="address" value={form.address} onChange={(event) => setForm({ ...form, address: event.target.value })} className={fieldClass} />
         </div>
 
         <div className="sm:col-span-2">
-            <label htmlFor="joinDate" className={labelClass}>Join Date</label>
+            <label htmlFor="joinDate" className={labelClass}>{t("Join Date")}</label>
             <input required type="date" id="joinDate" value={form.join_date} onChange={(event) => setForm({ ...form, join_date: event.target.value })} className={fieldClass} />
         </div>
 
-        {error && <p className="text-sm text-red-300 sm:col-span-2">{error}</p>}
+        {error && <p className="text-sm text-red-300 sm:col-span-2">{translateError(error)}</p>}
 
         <div className="flex flex-col-reverse gap-3 border-t border-[#8EB69B]/25 pt-5 sm:col-span-2 sm:flex-row sm:justify-end">
-            <Button buttonName="Close" buttonType="button" buttonSign="" callback={onClose} />
-            <Button buttonName={saving ? "Saving..." : member ? "Save Changes" : "Add Member"} buttonType="submit" buttonSign="" />
+            <Button buttonName={t("Close")} buttonType="button" buttonSign="" callback={onClose} />
+            <Button buttonName={saving ? t("Saving...") : member ? t("Save Changes") : t("Add Member")} buttonType="submit" buttonSign="" />
         </div>
     </form>
     );

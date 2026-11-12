@@ -1,3 +1,4 @@
+import { useLocale } from "../../i18n/useLocale";
 
 
 
@@ -10,20 +11,14 @@ const nameHeaders = [
 ]
 
 function MembershipNamesHeader (){
+    const { t } = useLocale();
     
     return(
-        <div className="flex min-w-[800px] items-center border-b border-border bg-secondary/40 px-7 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="grid w-full min-w-[850px] grid-cols-[minmax(12rem,1.7fr)_minmax(8rem,1fr)_minmax(8rem,1fr)_minmax(9rem,1.1fr)_minmax(9rem,1.1fr)_auto] items-center gap-3 border-b border-border bg-secondary/40 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             {nameHeaders.map((item)=>{
-                const widths = {
-                    Member: "w-[240px] shrink-0",
-                    Plan: "w-[120px] shrink-0",
-                    Start: "w-[140px] shrink-0",
-                    Expiration: "w-[150px] shrink-0",
-                    Status: "w-[150px] shrink-0",
-                };
-                return <p key={item.label} className={widths[item.label]}>{item.label}</p>
+                return <p key={item.label} className="min-w-0">{t(item.label)}</p>
             })}
-            <span className="w-[68px] shrink-0 text-center">Action</span>
+            <span className="justify-self-end">{t("Action")}</span>
         </div>
     );
 };

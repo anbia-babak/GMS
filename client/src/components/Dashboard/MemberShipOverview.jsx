@@ -1,3 +1,4 @@
+import { useLocale } from "../../i18n/useLocale";
 import { useEffect, useState } from "react";
 import { Pie, PieChart, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { getApiErrorMessage } from "../../api/apiClient";
@@ -12,9 +13,10 @@ const COLORS = {
 
 
 function MemberShipOverview() {
+    const { t, formatNumber, translateError } = useLocale();
 
     
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [error, setError] = useState("");
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
@@ -27,7 +29,7 @@ function MemberShipOverview() {
               }
           }
           loadMembers();
-      }, [refreshKey]);
+      }, []);
 
 
   const membershipOverview = [
@@ -41,15 +43,12 @@ function MemberShipOverview() {
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-lg shadow-black/10 sm:p-6">
         <div className="mb-2">
-        <h2 className="text-base font-semibold text-card-foreground">
-          Membership Overview
-        </h2>
-        <p className="text-xs text-muted-foreground">
-          Expiring Soon = expires within the next 7 days
-        </p>
+        <h2 className="text-base font-semibold text-card-foreground">{t("Membership Overview")}</h2>
+        <p className="text-xs text-muted-foreground">{t("Expiring Soon = expires within the next 7 days")}</p>
       </div>
 
 
+      {error && <p className="mb-3 text-sm text-red-500">{translateError(error)}</p>}
          <div className="relative h-44">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -68,6 +67,7 @@ function MemberShipOverview() {
               ))}
             </Pie>
             <Tooltip
+              formatter={(value, name) => [formatNumber(value), t(name)]}
               contentStyle={{
                 backgroundColor: "var(--popover)",
                 border: "1px solid var(--border)",
@@ -78,8 +78,8 @@ function MemberShipOverview() {
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-2xl font-bold text-card-foreground">{total}</span>
-          <span className="text-xs text-muted-foreground">Total</span>
+          <span className="text-2xl font-bold text-card-foreground">{formatNumber(total)}</span>
+          <span className="text-xs text-muted-foreground">{t("Total")}</span>
         </div>
       </div>
 
@@ -91,9 +91,9 @@ function MemberShipOverview() {
                 className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: COLORS[item.name] }}
               />
-              {item.name}
+              {t(item.name)}
             </span>
-            <span className="font-semibold text-card-foreground">{item.value}</span>
+            <span className="font-semibold text-card-foreground">{formatNumber(item.value)}</span>
           </li>
         ))}
       </ul>

@@ -1,21 +1,20 @@
+import { useLocale } from "../../i18n/useLocale";
 import { useEffect, useState } from "react";
-import { Moon } from "lucide-react"; 
+import { SunMoon } from "lucide-react";
 // Toggles the "dark" class on <html>. Your style.css already has
 // :root (light colors) and .dark (dark colors), so this switches the whole app.
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
+    const { t } = useLocale();
+  const [isDark, setIsDark] = useState(() => localStorage.getItem("gms-theme") === "dark");
 
-  // Load the saved choice when the page opens
+  // Apply the saved theme when this control mounts and whenever it changes.
   useEffect(() => {
-    const saved = localStorage.getItem("gms-theme") === "dark";
-    setIsDark(saved);
-    document.documentElement.classList.toggle("dark", saved);
-  }, []);
+    document.documentElement.classList.toggle("dark", isDark);
+  }, [isDark]);
 
   function toggleTheme() {
     const next = !isDark;
     setIsDark(next);
-    document.documentElement.classList.toggle("dark", next);
     localStorage.setItem("gms-theme", next ? "dark" : "light");
   }
 
@@ -23,12 +22,11 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#8EB69B]/40 bg-[#0B2B26] px-4 text-sm font-semibold text-[#DAF1DE] shadow-sm transition hover:bg-[#DAF1DE] dark:border-[#8EB69B]/25 dark:bg-white dark:text-[#0B2B26] dark:hover:bg-[#235347]"
+      aria-pressed={isDark}
+      aria-label={isDark ? t("Switch to light mode") : t("Switch to dark mode")}
+      className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-[#8EB69B]/30 bg-[#0B2B26] text-[#DAF1DE] shadow-sm transition duration-200 hover:border-[#8EB69B]/60 hover:bg-[#235347] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8EB69B] dark:border-gray-300 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
     >
-       {/* dark:bg-white bg--[#8EB69B] */}
-      <span className="text-base"><Moon /></span>
-      {/* {isDark ? "Light " : "Dark "} */}
+      <SunMoon size={19} aria-hidden="true" />
     </button>
   );
 }

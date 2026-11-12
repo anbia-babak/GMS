@@ -1,3 +1,4 @@
+import { useLocale } from "../../i18n/useLocale";
 
 const navItems = [
   { label: "All Members", value: "all" },
@@ -7,9 +8,10 @@ const navItems = [
 ];
 
 function MembersNavigation({ selectedTab, onTabChange }) {
+    const { t } = useLocale();
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3">
-      <div className="flex w-full gap-1 overflow-x-auto rounded-xl border border-border bg-card p-1 sm:w-auto">
+    <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3">
+      <div className="flex w-full max-w-full gap-1 overflow-x-auto rounded-xl border border-border bg-card p-1 sm:w-auto">
         {navItems.map((item) => (
           <button
             key={item.value}
@@ -21,7 +23,7 @@ function MembersNavigation({ selectedTab, onTabChange }) {
                 : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
-            {item.label}
+            {t(item.label)}
           </button>
         ))}
       </div>
@@ -29,7 +31,7 @@ function MembersNavigation({ selectedTab, onTabChange }) {
       {/* Calendar icon */}
       <div
         className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-primary"
-        aria-label="Calendar"
+        aria-label={t("Calendar")}
       >
         {/* Keep your existing SVG here */}
       </div>

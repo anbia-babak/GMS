@@ -1,6 +1,9 @@
+import { useLocale } from "../../i18n/useLocale";
 import { NavLink } from "react-router";
+import LanguageSelector from "./LanguageSelector";
 import ThemeToggle from "./ThemeToggle";
 import { useNavigate } from "react-router";
+import GymLogo from "../common/GymLogo";
 
 const navItems = [
     {label: "Dashboard", path: "/dashboard"},
@@ -25,6 +28,7 @@ function NavigationIcon({ label }) {
 }
 
 function Sidebar(){
+    const { t } = useLocale();
 
     const navigate = useNavigate();
 
@@ -36,54 +40,55 @@ function Sidebar(){
         });
 
         if (response.ok) {
+        // The protected layout unmounts as soon as logout succeeds and replaces browser history.
         navigate("/login", { replace: true });
         } else {
-        alert("Logout failed. Please try again.");
+        alert(t("Logout failed. Please try again."));
         }
     } catch (error) {
         console.error("Logout error:", error);
-        alert("Unable to connect to the server.");
+        alert(t("Unable to connect to the server."));
     }
     };
     return(
-        <aside className="hidden sticky top-0 h-screen w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground md:flex">
+        <aside className="no-print flex shrink-0 flex-col border-b border-sidebar-border bg-sidebar text-sidebar-foreground md:sticky md:top-0 md:h-screen md:w-60 md:border-b-0 md:border-e">
             <div className="flex items-center gap-3 px-5 py-6">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="2"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12" /><path d="m8 7 2-2M14 19l2-2" /></svg>
-                </div>
+                <GymLogo className="h-11 w-11 shrink-0" />
                 <div>
                     <p className="text-sm font-bold tracking-wide">SUPER POWER GYM</p>
-                    <p className="text-xs text-muted-foreground">Management System</p>
+                    <p className="text-xs text-muted-foreground">{t("Management System")}</p>
                 </div>
             </div>
 
-            <nav className="flex-1 space-y-1 px-3 py-2">
+            <nav className="grid grid-cols-2 gap-1 px-3 py-2 sm:grid-cols-3 md:flex-1 md:grid-cols-1 md:content-start">
                 {navItems.map((item)=>(
-                    <NavLink to={item.path} key={item.label}
+                    <NavLink to={item.path} key={item.path}
                     className={({ isActive }) => `flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium 
                     transition-colors ${isActive ? "bg-primary text-primary-foreground shadow-md shadow-primary/10" : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"}`}>
                         <NavigationIcon label={item.label} />
-                        {item.label}
+                        {t(item.label)}
                     </NavLink>
                 ))}
             </nav>
 
-            <div className="border-t border-sidebar-border p-3 flex item-center justify-between gap-2">
+            {/* Fixed grid columns keep the three compact controls aligned in both text directions. */}
+            <div className="grid grid-cols-[minmax(0,1fr)_2.75rem_auto] items-center gap-2 border-t border-sidebar-border p-3">
+                <LanguageSelector />
+                <ThemeToggle />
                 <button
                     onClick={handleLogout}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    className="flex min-h-10 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-white/10 bg-white/5 px-2 text-xs font-semibold text-sidebar-foreground shadow-sm transition duration-200 hover:border-[#8EB69B]/40 hover:bg-[#235347] hover:text-[#DAF1DE] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8EB69B] dark:border-white/10 dark:hover:border-primary dark:text-muted-foreground dark:hover:text-sidebar-accent-foreground dark:hover:bg-sidebar"
                     >
                     <svg
                         viewBox="0 0 24 24"
-                        className="h-[18px] w-[18px] fill-none stroke-current"
+                        className="h-[18px] w-[18px] shrink-0 fill-none stroke-current rtl:-scale-x-100"
                         strokeWidth="1.8"
                     >
                         <path d="M10 17l5-5-5-5M15 12H3" />
                         <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" />
                     </svg>
-                    Logout
+                    {t("Logout")}
                 </button>
-                <ThemeToggle />
             </div>
 
         </aside>
